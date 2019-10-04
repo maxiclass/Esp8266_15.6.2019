@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Port_cnf">
+      <UniqueIdentifier>{b5b04f09-214d-4d2b-bb12-0ae10feeb8c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\RGB_led_cnf">
+      <UniqueIdentifier>{acbacb2d-8539-4781-880f-ade4c3fa72ac}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="web_page_for_arduino.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RGB_led_cnf.h">
+      <Filter>Resource Files\RGB_led_cnf</Filter>
+    </ClInclude>
+    <ClInclude Include="Port_functions.h">
+      <Filter>Resource Files\Port_cnf</Filter>
+    </ClInclude>
+    <ClInclude Include="index.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Main\Main.ino">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RGB_led_cnf.cpp">
+      <Filter>Resource Files\RGB_led_cnf</Filter>
+    </ClCompile>
+    <ClCompile Include="Port_functions.cpp">
+      <Filter>Resource Files\Port_cnf</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
