@@ -123,19 +123,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Handle_Web.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="index.h" />
-    <ClInclude Include="Port_functions.h" />
-    <ClInclude Include="RGB_led_cnf.h" />
-    <ClInclude Include="web_page_for_arduino.h" />
+    <ClInclude Include="ShareableResources.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Main\Main.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Port_functions.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="RGB_led_cnf.cpp" />
+    <ClCompile Include="Handle_Web.cpp" />
+    <ClCompile Include="ShareableResources.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

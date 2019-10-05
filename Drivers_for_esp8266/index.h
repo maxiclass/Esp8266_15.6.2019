@@ -1,4 +1,4 @@
-String page =
+const char MAIN_page[]  =
 R"(
 <html lang='en'>
     <head>

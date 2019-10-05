@@ -13,28 +13,25 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Resource Files\Port_cnf">
-      <UniqueIdentifier>{b5b04f09-214d-4d2b-bb12-0ae10feeb8c4}</UniqueIdentifier>
+    <Filter Include="Resource Files\Handle_Web">
+      <UniqueIdentifier>{fed89e75-e0bc-4e9d-b85b-5dde9cdadc90}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\RGB_led_cnf">
-      <UniqueIdentifier>{acbacb2d-8539-4781-880f-ade4c3fa72ac}</UniqueIdentifier>
+    <Filter Include="Resource Files\ShareableResources">
+      <UniqueIdentifier>{6f4a6a42-4c6d-40f0-b569-0d3016f469fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="web_page_for_arduino.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RGB_led_cnf.h">
-      <Filter>Resource Files\RGB_led_cnf</Filter>
-    </ClInclude>
-    <ClInclude Include="Port_functions.h">
-      <Filter>Resource Files\Port_cnf</Filter>
-    </ClInclude>
     <ClInclude Include="index.h">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Handle_Web</Filter>
+    </ClInclude>
+    <ClInclude Include="Handle_Web.h">
+      <Filter>Resource Files\Handle_Web</Filter>
+    </ClInclude>
+    <ClInclude Include="ShareableResources.h">
+      <Filter>Resource Files\ShareableResources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -43,14 +40,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="Handle_Web.cpp">
+      <Filter>Resource Files\Handle_Web</Filter>
+    </ClCompile>
+    <ClCompile Include="ShareableResources.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RGB_led_cnf.cpp">
-      <Filter>Resource Files\RGB_led_cnf</Filter>
-    </ClCompile>
-    <ClCompile Include="Port_functions.cpp">
-      <Filter>Resource Files\Port_cnf</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
