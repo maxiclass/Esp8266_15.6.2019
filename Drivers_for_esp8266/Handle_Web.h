@@ -3,6 +3,7 @@
 #include "ESP8266WebServer.h"
 #include <cstdint>
 #include <stdlib.h>
+#include "ShareableResources.h"
 
 static const uint8_t D0 = 16;
 static const uint8_t D1 = 5;

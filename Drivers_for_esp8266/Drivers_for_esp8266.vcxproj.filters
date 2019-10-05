@@ -44,7 +44,7 @@
       <Filter>Resource Files\Handle_Web</Filter>
     </ClCompile>
     <ClCompile Include="ShareableResources.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files\ShareableResources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
