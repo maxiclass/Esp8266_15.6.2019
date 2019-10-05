@@ -1,6 +1,7 @@
 #include "Handle_Web.h"
 
 ESP8266WebServer server(80);
+Servo servo1;                        //variable for servo
 
 const char* ssid = "DIGI-JPyU";
 const char* password = "Parola12";
@@ -95,13 +96,16 @@ void redFunction()
 //function for controlling the green LED
 void greenFunction()
 {
-	int value2 = server.arg("state2").toInt();
-	value2 = map(value2, 0, 100, 0, 1023);
 
+	int value2 = server.arg("state2").toInt();
+	int	valueServo = server.arg("state2").toInt();
+	value2 = map(value2, 0, 100, 0, 1023);
 	if (value2 == 0)
 		digitalWrite(green, LOW);//turn of the led
 	else
-		analogWrite(green, value2);//change the brightness of green
+	valueServo = map(value2, 0, 100, 0, 180);
+	servo1.write(valueServo);
+	analogWrite(green, value2);//change the brightness of green
 
 	server.send(200, "text/html", "green");
 }
@@ -125,6 +129,9 @@ volatile unsigned long next;
 void DriversInit()
 
 {
+	pinMode(ServoPin, OUTPUT);
+	servo1.attach(ServoPin);
+
 	pinMode(red, OUTPUT);
 	pinMode(green, OUTPUT);
 	pinMode(blue, OUTPUT);
@@ -137,10 +144,10 @@ void DriversInit()
 	delay(1000);
 }
 
-void SensorDetectionInteruput()
+void SensorDetectionInterruput()
 {
 	digitalWrite(TrigerSensorHC, HIGH);
-	delayMicroseconds(20);
+	delayMicroseconds(10);
 	digitalWrite(TrigerSensorHC, LOW);
 
 	// Reads the echoPin, returns the sound wave travel time in microseconds
@@ -186,8 +193,10 @@ void SetDistanceLight(float distance)
 			digitalWrite(green, LOW);//change the brightness of reds of red
 		}
 	}
-	Serial.println(distanceSensorHC);
-	Serial.println(u32secondsCounter);
+	//Serial.println(distanceSensorHC);
+	
+	
+
 	//Serial.println(u32counter);
 
 }
@@ -198,25 +207,37 @@ void InitTimer1()
 	noInterrupts();
 	timer0_isr_init();
 	timer0_attachInterrupt(ScheduleTime1);
-	timer0_write(ESP.getCycleCount() + 1600000); //160Mhz -> 160*10^6 = 1 second (160000000)
+	timer0_write(ESP.getCycleCount() + 16000000); //160Mhz -> 160*10^6 = 1 second (160000000)
 	interrupts();
 
 }
 
 void ScheduleTime1()
 {
-	u32milisecondsCounter++;
-	if ((u32milisecondsCounter % 1000) == 0)
-	{
-		u32secondsCounter++;
-		if ((u32secondsCounter % 60) == 0)
-		{
-			u32minutesCounter++;
-		}
-	}
-
-	SensorDetectionInteruput();
 	// Set-up the next interrupt cycle
-	timer0_write(ESP.getCycleCount() + 1600000); //160Mhz -> 160*10^6 = 1 second (160000000)
+	timer0_write(ESP.getCycleCount() + 16000000); //160Mhz -> 160*10^6 = 1 second (160000000)
+
+	u32milisecondsCounter++;
+	//serial.println(u32milisecondsCounter);
+
+	//activate 1 second interruput
+	if ((u32milisecondsCounter % 100) == 0)
+	{
+		vDoIsr1Sec();
+		
+	}
+	//SensorDetectionInterruput();
+	
+
 }
 
+void vDoIsr1Sec()
+{
+	u32secondsCounter++;
+	Serial.println(u32secondsCounter);
+
+	if ((u32secondsCounter % 60) == 0)
+	{
+		u32minutesCounter++; // TODO 1 minute Isr function
+	}
+}

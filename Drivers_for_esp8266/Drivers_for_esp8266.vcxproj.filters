@@ -19,6 +19,9 @@
     <Filter Include="Resource Files\ShareableResources">
       <UniqueIdentifier>{6f4a6a42-4c6d-40f0-b569-0d3016f469fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Servo_control">
+      <UniqueIdentifier>{40052153-43c0-48f6-9bc9-2de15c90761a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h">

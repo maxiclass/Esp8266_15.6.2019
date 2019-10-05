@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <stdlib.h>
 #include "ShareableResources.h"
-
+#include <Servo.h>                //including the servo library
 static const uint8_t D0 = 16;
 static const uint8_t D1 = 5;
 static const uint8_t D2 = 4;
@@ -17,6 +17,8 @@ static const uint8_t D8 = 15;
 static const uint8_t D9 = 3;
 static const uint8_t D10 = 1;
 
+//Define ServoPin
+const int ServoPin = D5;
 //create 3 variables that are used to stores the pins to which is the LED
 //attached
 const int red = D6;
@@ -31,11 +33,12 @@ static  float durationSensorHC = 0;
 static  float distanceSensorHC = 0;
 
 //Sensors Functions
-extern void SensorDetectionInteruput(void);
+extern void SensorDetectionInterruput(void);
 extern void SetDistanceLight(float);
 
 //Master Functions
 extern void InitTimer1(void);
+void vDoIsr1Sec(void);
 extern void ScheduleTime1(void);
 extern void DriversInit(void);
 

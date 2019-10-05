@@ -5,9 +5,9 @@ void setup()
 
   //call the two functions used to connect connect to wifi
   //and setup the server
+  DriversInit();
   connectToWiFi();
   setupServer();
-  DriversInit();
   InitTimer1();
 }
 
