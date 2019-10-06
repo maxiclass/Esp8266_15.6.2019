@@ -1,11 +1,12 @@
 #include "Handle_Web.h"
-
+#include "Control.h"
 ESP8266WebServer server(80);
-Servo servo1;                        //variable for servo
 
 const char* ssid = "DIGI-JPyU";
 const char* password = "Parola12";
 
+
+Servo servo1;                        //variable for servo
 
 String page = MAIN_page; //Read HTML contents
 //the htmlIndex() is called everytime somebody access the address
@@ -62,6 +63,7 @@ void setupServer()
 	server.on("/redFunction", redFunction);
 	server.on("/greenFunction", greenFunction);
 	server.on("/blueFunction", blueFunction);
+	server.on("/MoveServoFunction", MoveServoFunction);
 	// 
 	 //start the server
 	server.begin();
@@ -79,17 +81,21 @@ void HandleWebClient()
 }
 
 
+void MoveServoFunction()
+{
+	int	valueServo = server.arg("statusServo").toInt();	
+	servo1.write(valueServo);
+}
+
 //function for controlling the red LED
 void redFunction()
 {
 	int value1 = server.arg("state1").toInt();
 	value1 = map(value1, 0, 100, 0, 1023);
-
 	if (value1 == 0)
 		digitalWrite(red, LOW);//turn of the led
 	else
 		analogWrite(red, value1);//change the brightness of red
-
 	server.send(200, "text/html", "red");
 }
 
@@ -98,15 +104,11 @@ void greenFunction()
 {
 
 	int value2 = server.arg("state2").toInt();
-	int	valueServo = server.arg("state2").toInt();
 	value2 = map(value2, 0, 100, 0, 1023);
 	if (value2 == 0)
 		digitalWrite(green, LOW);//turn of the led
 	else
-	valueServo = map(value2, 0, 100, 0, 180);
-	servo1.write(valueServo);
 	analogWrite(green, value2);//change the brightness of green
-
 	server.send(200, "text/html", "green");
 }
 
@@ -131,12 +133,12 @@ void DriversInit()
 {
 	pinMode(ServoPin, OUTPUT);
 	servo1.attach(ServoPin);
-
+	servo1.write(0);
 	pinMode(red, OUTPUT);
 	pinMode(green, OUTPUT);
 	pinMode(blue, OUTPUT);
-	pinMode(TrigerSensorHC, OUTPUT); // Sets the trigPin as an Output
-	pinMode(EchoSensorHC, INPUT); // Sets the echoPin as an Input
+	//pinMode(TrigerSensorHC, OUTPUT); // Sets the trigPin as an Output
+	//pinMode(EchoSensorHC, INPUT); // Sets the echoPin as an Input
 	//start the Serial communication at 115200 bits/s
 	Serial.begin(115200);
 
@@ -144,62 +146,6 @@ void DriversInit()
 	delay(1000);
 }
 
-void SensorDetectionInterruput()
-{
-	digitalWrite(TrigerSensorHC, HIGH);
-	delayMicroseconds(10);
-	digitalWrite(TrigerSensorHC, LOW);
-
-	// Reads the echoPin, returns the sound wave travel time in microseconds
-	durationSensorHC = pulseIn(EchoSensorHC, HIGH);
-	// Calculating the distance
-	distanceSensorHC = (durationSensorHC * 0.034) / 2;
-
-	
-	SetDistanceLight(distanceSensorHC);
-
-}
-
-//set distance light compare with the sensor result
-void SetDistanceLight(float distance)
-{
-	static int u32counter=0;
-	u32counter++;
-	if (u32counter >= 1000)
-	{
-		u32counter = 0;
-		if (distance < 30.0)
-		{
-			digitalWrite(red, HIGH);//change the brightness of red
-			digitalWrite(blue, LOW);//change the brightness of red
-			digitalWrite(green, LOW);//change the brightness of red
-		}
-		if ((distance > 30.0) && (distance < 50.0))
-		{
-			digitalWrite(red, LOW);//change the brightness of red
-			digitalWrite(blue, HIGH);//change the brightness of red
-			digitalWrite(green, LOW);//change the brightness of reds of red
-		}
-		if ((distance > 50.0) && (HIGH < 150.0))
-		{
-			digitalWrite(red, LOW);//change the brightness of red
-			digitalWrite(blue, LOW);//change the brightness of red
-			digitalWrite(green, HIGH);//change the brightness of reds of red
-		}
-		else
-		{
-			digitalWrite(red, LOW);//change the brightness of red
-			digitalWrite(blue, LOW);//change the brightness of red
-			digitalWrite(green, LOW);//change the brightness of reds of red
-		}
-	}
-	//Serial.println(distanceSensorHC);
-	
-	
-
-	//Serial.println(u32counter);
-
-}
 
 // initialize timer1 
 void InitTimer1()
@@ -218,23 +164,34 @@ void ScheduleTime1()
 	timer0_write(ESP.getCycleCount() + 16000000); //160Mhz -> 160*10^6 = 1 second (160000000)
 
 	u32milisecondsCounter++;
-	//serial.println(u32milisecondsCounter);
 
+	Serial.println(servo1.read());
 	//activate 1 second interruput
 	if ((u32milisecondsCounter % 100) == 0)
 	{
-		vDoIsr1Sec();
+
 		
 	}
 	//SensorDetectionInterruput();
-	
+	server.send(200, "text/html", "Distance");
 
+	vDoIsr1Sec();
 }
+
 
 void vDoIsr1Sec()
 {
 	u32secondsCounter++;
-	Serial.println(u32secondsCounter);
+
+	int value = analogRead(A0);
+	Serial.println(value);
+
+	//remap the analog value to a new range (from 0 to 180) as the
+	//servo can turn max 180 degrees.
+	value = map(value, 0, 1024, 0, 180);
+
+	//turn the servo motor accordingly to the angle stored in value
+	servo1.write(value);
 
 	if ((u32secondsCounter % 60) == 0)
 	{

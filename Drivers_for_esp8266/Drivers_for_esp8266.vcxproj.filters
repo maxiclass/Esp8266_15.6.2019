@@ -22,6 +22,9 @@
     <Filter Include="Resource Files\Servo_control">
       <UniqueIdentifier>{40052153-43c0-48f6-9bc9-2de15c90761a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Control">
+      <UniqueIdentifier>{6c68b68e-eb40-40c7-964a-6b862e0f3210}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h">
@@ -36,10 +39,19 @@
     <ClInclude Include="ShareableResources.h">
       <Filter>Resource Files\ShareableResources</Filter>
     </ClInclude>
+    <ClInclude Include="Control.h">
+      <Filter>Resource Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="DHT_11_driver.h">
+      <Filter>Resource Files\Control</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Main\Main.ino">
       <Filter>Source Files</Filter>
+    </None>
+    <None Include="HTMLPage.htm">
+      <Filter>Resource Files\Handle_Web</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +60,12 @@
     </ClCompile>
     <ClCompile Include="ShareableResources.cpp">
       <Filter>Resource Files\ShareableResources</Filter>
+    </ClCompile>
+    <ClCompile Include="Control.cpp">
+      <Filter>Resource Files\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="DHT_11_driver.cpp">
+      <Filter>Resource Files\Control</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

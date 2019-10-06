@@ -26,15 +26,16 @@ const int green = D7;
 const int blue = D8;
 
 //HC-sr04 ultrasonic sensor
-static const int TrigerSensorHC = D1;
-static const int EchoSensorHC = D2;
+//static const int TrigerSensorHC = D1;
+//static const int EchoSensorHC = D2;
 //Defines variables for HC-sr04 ultrasonic sensor
 static  float durationSensorHC = 0;
 static  float distanceSensorHC = 0;
 
 //Sensors Functions
-extern void SensorDetectionInterruput(void);
-extern void SetDistanceLight(float);
+//extern void SensorDetectionInterruput(void);
+//extern void SetDistanceLight(float);
+
 
 //Master Functions
 extern void InitTimer1(void);
@@ -51,3 +52,4 @@ extern void HandleWebClient(void);
 extern void redFunction(void);
 extern void greenFunction(void);
 extern void blueFunction(void);
+extern void MoveServoFunction(void);
