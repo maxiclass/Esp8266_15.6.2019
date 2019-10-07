@@ -153,7 +153,7 @@ void InitTimer1()
 	noInterrupts();
 	timer0_isr_init();
 	timer0_attachInterrupt(ScheduleTime1);
-	timer0_write(ESP.getCycleCount() + 16000000); //160Mhz -> 160*10^6 = 1 second (160000000)
+	timer0_write(ESP.getCycleCount() + 160000); //160Mhz -> 160*10^6 = 1 second (160000000)
 	interrupts();
 
 }
@@ -161,21 +161,19 @@ void InitTimer1()
 void ScheduleTime1()
 {
 	// Set-up the next interrupt cycle
-	timer0_write(ESP.getCycleCount() + 16000000); //160Mhz -> 160*10^6 = 1 second (160000000)
+	timer0_write(ESP.getCycleCount() + 160000); //160Mhz -> 160*10^6 = 1 second (160000000)
 
 	u32milisecondsCounter++;
 
-	Serial.println(servo1.read());
 	//activate 1 second interruput
 	if ((u32milisecondsCounter % 100) == 0)
 	{
-
-		
+		Serial.println(servo1.read());
+		Serial.println(u32milisecondsCounter);
+		vDoIsr1Sec();
 	}
-	//SensorDetectionInterruput();
-	server.send(200, "text/html", "Distance");
 
-	vDoIsr1Sec();
+
 }
 
 
