@@ -63,6 +63,13 @@ R"(
         <div class='col-sm-12'>
             <input type='range' min='0' max='180' class='form-control-range' id='slider_Servo' />
         </div>
+		    <!-- Insert New HTML elements for servo motor. -->
+		<div class="btn-group btn-group-lg">
+		<button type="button" class="btn btn-primary">Mode For Servo</button>
+		<button type="button" class="btn btn-primary">Analog</button>
+		<button type="button" class="btn btn-primary">Web</button>
+		</div>
+        </div>
     </div>
 </body>
 
