@@ -24,7 +24,7 @@ const int ServoPin = D5;
 const int red = D6;
 const int green = D7;
 const int blue = D8;
-
+const int Motor4PIN = D4;
 //HC-sr04 ultrasonic sensor
 //static const int TrigerSensorHC = D1;
 //static const int EchoSensorHC = D2;
@@ -52,4 +52,5 @@ extern void HandleWebClient(void);
 extern void redFunction(void);
 extern void greenFunction(void);
 extern void blueFunction(void);
+extern void Motor4Function(void);
 extern void MoveServoFunction(void);

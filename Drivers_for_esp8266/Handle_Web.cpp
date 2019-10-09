@@ -63,6 +63,7 @@ void setupServer()
 	server.on("/redFunction", redFunction);
 	server.on("/greenFunction", greenFunction);
 	server.on("/blueFunction", blueFunction);
+	server.on("/Motor4Function", Motor4Function);
 	server.on("/MoveServoFunction", MoveServoFunction);
 	// 
 	 //start the server
@@ -126,6 +127,21 @@ void blueFunction()
 	server.send(200, "text/html", "blue");
 }
 
+
+//function for controlling the blue LED
+void Motor4Function()
+{
+	int statusMotor4 = server.arg("statusMotor4").toInt();
+	statusMotor4 = map(statusMotor4, 0, 100, 0, 1023);
+
+	if (statusMotor4 == 0)
+		digitalWrite(Motor4PIN, LOW);//turn of the led
+	else
+		analogWrite(Motor4PIN, statusMotor4);//change the brightness of blue
+
+	server.send(200, "text/html", "Motor4");
+}
+
 volatile unsigned long next;
 
 void DriversInit()
@@ -137,6 +153,7 @@ void DriversInit()
 	pinMode(red, OUTPUT);
 	pinMode(green, OUTPUT);
 	pinMode(blue, OUTPUT);
+	pinMode(Motor4PIN, OUTPUT);
 	//pinMode(TrigerSensorHC, OUTPUT); // Sets the trigPin as an Output
 	//pinMode(EchoSensorHC, INPUT); // Sets the echoPin as an Input
 	//start the Serial communication at 115200 bits/s
@@ -189,7 +206,7 @@ void vDoIsr1Sec()
 	value = map(value, 0, 1024, 0, 180);
 
 	//turn the servo motor accordingly to the angle stored in value
-	servo1.write(value);
+	//servo1.write(value);
 
 	if ((u32secondsCounter % 60) == 0)
 	{

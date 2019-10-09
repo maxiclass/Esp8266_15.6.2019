@@ -43,12 +43,18 @@
         <div class='col-sm-12'>
             <input type='range' min='0' max='100' class='form-control-range' id='slider_blue' />
         </div>
+
         <div class='row'>
-            <div class='col-sm-12' style='color:red;font-size:3vh'>
-                Distance:
-                <b id='HC-sensor_distance'></b>
+            <div class='col-sm-12' style='color:blue;font-size:3vh'>
+                Motor4:
+                <b id='statusMotor4'></b>
             </div>
         </div>
+        <div class='col-sm-12'>
+            <input type='range' min='0' max='100' class='form-control-range' id='slider_Motor4' />
+        </div>
+    
+
 
         <!-- Insert New HTML elements for servo motor. -->
         <div class='row'>
@@ -104,6 +110,18 @@
             url: '/blueFunction',
             type: 'POST',
             data: { state3: state_slider_blue }
+        });
+    });
+
+        $('#slider_Motor4').on('change', function () {
+        var state_slider_Motor4 = $('#slider_Motor4').val();
+
+        $('#statusMotor4').html(state_slider_Motor4 + ' %');
+
+        $.ajax({
+            url: '/Motor4Function',
+            type: 'POST',
+            data: { statusMotor4: state_slider_Motor4 }
         });
     });
 

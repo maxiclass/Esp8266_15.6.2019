@@ -1,6 +1,11 @@
 const char MAIN_page[]  =
 R"(
 
+
+
+
+
+
 <html lang='en'>
 <head>
     <title>Dim an RGB LED</title>
@@ -46,12 +51,18 @@ R"(
         <div class='col-sm-12'>
             <input type='range' min='0' max='100' class='form-control-range' id='slider_blue' />
         </div>
+
         <div class='row'>
-            <div class='col-sm-12' style='color:red;font-size:3vh'>
-                Distance:
-                <b id='HC-sensor_distance'></b>
+            <div class='col-sm-12' style='color:blue;font-size:3vh'>
+                Motor4:
+                <b id='statusMotor4'></b>
             </div>
         </div>
+        <div class='col-sm-12'>
+            <input type='range' min='0' max='100' class='form-control-range' id='slider_Motor4' />
+        </div>
+    
+
 
         <!-- Insert New HTML elements for servo motor. -->
         <div class='row'>
@@ -63,63 +74,77 @@ R"(
         <div class='col-sm-12'>
             <input type='range' min='0' max='180' class='form-control-range' id='slider_Servo' />
         </div>
-		    <!-- Insert New HTML elements for servo motor. -->
-		<div class="btn-group btn-group-lg">
-		<button type="button" class="btn btn-primary">Mode For Servo</button>
-		</div>
+        <!-- Insert New HTML elements for servo motor. -->
+        <div class="btn-group btn-group-lg">
+            <button type="button" class="btn btn-primary">Mode For Servo</button>
+            <button type="button" class="btn btn-primary">Analog</button>
+            <button type="button" class="btn btn-primary">Web</button>
         </div>
+    </div>
     </div>
 </body>
 
 <script>
-        $('#slider_red').on('change', function(){
-            var state_slider_red = $('#slider_red').val();
+    $('#slider_red').on('change', function () {
+        var state_slider_red = $('#slider_red').val();
 
-            $('#status1').html(state_slider_red + ' %');
+        $('#status1').html(state_slider_red + ' %');
 
-            $.ajax({
-              url: '/redFunction',
-              type: 'POST',
-              data: {state1: state_slider_red}
-            });
+        $.ajax({
+            url: '/redFunction',
+            type: 'POST',
+            data: { state1: state_slider_red }
         });
+    });
 
-        $('#slider_green').on('change', function(){
-            var state_slider_green = $('#slider_green').val();
+    $('#slider_green').on('change', function () {
+        var state_slider_green = $('#slider_green').val();
 
-            $('#status2').html(state_slider_green + ' %');
+        $('#status2').html(state_slider_green + ' %');
 
-            $.ajax({
-              url: '/greenFunction',
-              type: 'POST',
-              data: {state2: state_slider_green}
-            });
+        $.ajax({
+            url: '/greenFunction',
+            type: 'POST',
+            data: { state2: state_slider_green }
         });
+    });
 
-        $('#slider_blue').on('change', function(){
-            var state_slider_blue = $('#slider_blue').val();
+    $('#slider_blue').on('change', function () {
+        var state_slider_blue = $('#slider_blue').val();
 
-            $('#status3').html(state_slider_blue + ' %');
+        $('#status3').html(state_slider_blue + ' %');
 
-            $.ajax({
-              url: '/blueFunction',
-              type: 'POST',
-              data: {state3: state_slider_blue}
-            });
+        $.ajax({
+            url: '/blueFunction',
+            type: 'POST',
+            data: { state3: state_slider_blue }
         });
+    });
 
-      //Insert script for servomotor control
-            $('#slider_Servo').on('change', function(){
-            var slider_Servo = $('#slider_Servo').val();
+        $('#slider_Motor4').on('change', function () {
+        var state_slider_Motor4 = $('#slider_Motor4').val();
 
-            $('#statusServo').html(slider_Servo + ' º');
+        $('#statusMotor4').html(state_slider_Motor4 + ' %');
 
-            $.ajax({
-              url: '/MoveServoFunction',
-              type: 'POST',
-              data: {statusServo: slider_Servo}
-            });
+        $.ajax({
+            url: '/Motor4Function',
+            type: 'POST',
+            data: { statusMotor4: state_slider_Motor4 }
         });
+    });
+
+    //Insert script for servomotor control
+    $('#slider_Servo').on('change', function () {
+        var slider_Servo = $('#slider_Servo').val();
+
+        $('#statusServo').html(slider_Servo + ' º');
+
+        $.ajax({
+            url: '/MoveServoFunction',
+            type: 'POST',
+            data: { statusServo: slider_Servo }
+        });
+    });
 </script>
 </html>
 )";
