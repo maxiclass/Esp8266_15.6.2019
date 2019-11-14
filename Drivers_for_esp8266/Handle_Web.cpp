@@ -1,11 +1,13 @@
 #include "Handle_Web.h"
 #include "Control.h"
+#include "MpuControl.h"
 ESP8266WebServer server(80);
 
 const char* ssid = "DIGI-JPyU";
 const char* password = "Parola12";
-
-
+const int frequency = 60;  //60hz
+const int resolution = 8;
+const int maxvalue = 254; //max value for pwm's
 Servo servo1;                        //variable for servo
 
 String page = MAIN_page; //Read HTML contents
@@ -92,10 +94,11 @@ void MoveServoFunction()
 void redFunction()
 {
 	int value1 = server.arg("state1").toInt();
-	value1 = map(value1, 0, 100, 0, 1023);
+	value1 = map(value1, 0, 254, 0, 1023);
 	if (value1 == 0)
 		digitalWrite(red, LOW);//turn of the led
 	else
+		//ledcWrite(red, value1);
 		analogWrite(red, value1);//change the brightness of red
 	server.send(200, "text/html", "red");
 }
@@ -142,6 +145,19 @@ void Motor4Function()
 	server.send(200, "text/html", "Motor4");
 }
 
+void ControlLedsRandom()
+{
+	
+	analogWrite(blue, (rand() % 1023));
+	analogWrite(green, (rand() % 1023));
+	analogWrite(red, (rand() % 1023));
+	analogWrite(Motor4PIN, (rand() % 1023));
+	servo1.write((rand() % 100));
+}
+
+
+
+
 volatile unsigned long next;
 
 void DriversInit()
@@ -158,6 +174,8 @@ void DriversInit()
 	//pinMode(EchoSensorHC, INPUT); // Sets the echoPin as an Input
 	//start the Serial communication at 115200 bits/s
 	Serial.begin(115200);
+
+	vInit_Mpu(); // Init MPU sensors (accelerometer / gyroscope / magnetometer)
 
 	//wait 1 s until the Serial communication is started
 	delay(1000);
@@ -182,12 +200,31 @@ void ScheduleTime1()
 
 	u32milisecondsCounter++;
 
+
+
+	//remap the analog value to a new range (from 0 to 180) as the
+	//servo can turn max 180 degrees.
+	//value = map(value, 0, 1024, 0, 180);
+	//servo1.write(value);
+
+
+
+
+
+
 	//activate 1 second interruput
-	if ((u32milisecondsCounter % 100) == 0)
+	if ((u32milisecondsCounter % 1000) == 0)
 	{
-		Serial.println(servo1.read());
-		Serial.println(u32milisecondsCounter);
+		//int value = analogRead(A0);
+		//     Serial.println(value);
+		//value = map(value, 0, 1024, 0, 180);
+		//servo1.write(value);
+		//Serial.println(servo1.read());
+		//Serial.println(u32milisecondsCounter);
 		vDoIsr1Sec();
+		//ControlLedsRandom();
+
+		vprint_Mpu_data();
 	}
 
 
@@ -198,15 +235,6 @@ void vDoIsr1Sec()
 {
 	u32secondsCounter++;
 
-	int value = analogRead(A0);
-	Serial.println(value);
-
-	//remap the analog value to a new range (from 0 to 180) as the
-	//servo can turn max 180 degrees.
-	value = map(value, 0, 1024, 0, 180);
-
-	//turn the servo motor accordingly to the angle stored in value
-	//servo1.write(value);
 
 	if ((u32secondsCounter % 60) == 0)
 	{

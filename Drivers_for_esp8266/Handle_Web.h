@@ -18,13 +18,13 @@ static const uint8_t D9 = 3;
 static const uint8_t D10 = 1;
 
 //Define ServoPin
-const int ServoPin = D5;
+const int ServoPin = D4;
 //create 3 variables that are used to stores the pins to which is the LED
 //attached
 const int red = D6;
 const int green = D7;
 const int blue = D8;
-const int Motor4PIN = D4;
+const int Motor4PIN = D5;
 //HC-sr04 ultrasonic sensor
 //static const int TrigerSensorHC = D1;
 //static const int EchoSensorHC = D2;
@@ -54,3 +54,4 @@ extern void greenFunction(void);
 extern void blueFunction(void);
 extern void Motor4Function(void);
 extern void MoveServoFunction(void);
+extern void ControlLedsRandom(void);

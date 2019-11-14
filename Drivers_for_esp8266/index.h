@@ -4,8 +4,6 @@ R"(
 
 
 
-
-
 <html lang='en'>
 <head>
     <title>Dim an RGB LED</title>
@@ -18,7 +16,7 @@ R"(
     <div class='container-fluid text-center'>
         <div class='row'>
             <div class='col-sm-12' style='color:red;font-size:7vh'>
-                <p>Use the sliders to control the brightness.</p>
+                <p>Drone project setup -> AXE 1114C.</p>
             </div>
         </div>
         <br />
