@@ -4,6 +4,18 @@ R"(
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 <html lang='en'>
 <head>
     <title>Dim an RGB LED</title>
@@ -59,7 +71,7 @@ R"(
         <div class='col-sm-12'>
             <input type='range' min='0' max='100' class='form-control-range' id='slider_Motor4' />
         </div>
-    
+
 
 
         <!-- Insert New HTML elements for servo motor. -->
@@ -74,7 +86,7 @@ R"(
         </div>
         <!-- Insert New HTML elements for servo motor. -->
         <div class="btn-group btn-group-lg">
-            <button type="button" class="btn btn-primary">Mode For Servo</button>
+            <button type="button" class="btn btn-primary">Analog</button>
             <button type="button" class="btn btn-primary">Analog</button>
             <button type="button" class="btn btn-primary">Web</button>
         </div>
@@ -82,9 +94,114 @@ R"(
     </div>
 </body>
 
+<!-- new elements for printing ACC and GYR (posible MAG) measurements -->
+
+
+<style>
+    .sensor_representation_A {
+        position: absolute;
+        max-width: 150px;
+        min-height: 100px;
+        background: #02b875;
+        padding: 20px;
+        box-sizing: border-box;
+        color: #FFF;
+        margin: 20px;
+        box-shadow: 0px 2px 15px -4px rgba(0,0,0,0.75);
+    }
+
+    .sensor_representation_B {
+       position: absolute;
+  left: +200px;
+        max-width: 150px;
+        min-height: 100px;
+        background: #02b875;
+        padding: 20px;
+        box-sizing: border-box;
+        color: #FFF;
+        margin: 20px;
+        box-shadow: 0px 2px 15px -4px rgba(0,0,0,0.75);
+    }
+
+    .sensor_representation_C {
+          position: absolute;
+        left: +400px;
+        max-width: 150px;
+        min-height: 100px;
+        background: #02b875;
+        padding: 20px;
+        box-sizing: border-box;
+        color: #FFF;
+        margin: 20px;
+        box-shadow: 0px 2px 15px -4px rgba(0,0,0,0.75);
+    }
+</style>
+
+
+
+<body>
+
+    <div class="sensor_representation_A">
+
+        <h6>Accelermeter</h6><br>
+        <h6>AX:<span id="AccelermeterValueX">0</span></h6><br>
+        <h6>AY:<span id="AccelermeterValueY">0</span></h6><br>
+        <h6>AZ:<span id="AccelermeterValueZ">0</span></h6><br>
+    </div>
+
+    <div class="sensor_representation_B">
+        <h6>Gyroscope</h6><br>
+        <h6>GX:<span id="GyroscopeValueX">0</span></h6><br>
+        <h6>GY:<span id="GyroscopeValueY">0</span></h6><br>
+        <h6>GZ:<span id="GyroscopeValueZ">0</span></h6><br>
+    </div>
+
+    <div class="sensor_representation_C">
+        <h6>Magnetormeter</h6><br>
+        <h6>MX:<span id="MagnetormeterValueX">0</span></h6><br>
+        <h6>MY:<span id="MagnetormeterValueY">0</span></h6><br>
+        <h6>MZ:<span id="MagnetormeterValueZ">0</span></h6><br>
+    </div>
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
+
+setInterval(function() {
+  // Call a function repetatively with 2 Second interval
+  getData();
+}, 2000); //2000mSeconds update rate
+ 
+function getData() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("AccelermeterValueX").innerHTML =
+      this.responseText;
+    }
+  };
+  xhttp.open("GET", "vSend_Mpu_data_to_web", true);
+  xhttp.send();
+}
+
+
+
+
     $('#slider_red').on('change', function () {
-        var state_slider_red = $('#slider_red').val();
+        var state_slider_red = $('#slider_redslider_red').val();
 
         $('#status1').html(state_slider_red + ' %');
 
@@ -119,7 +236,7 @@ R"(
         });
     });
 
-        $('#slider_Motor4').on('change', function () {
+    $('#slider_Motor4').on('change', function () {
         var state_slider_Motor4 = $('#slider_Motor4').val();
 
         $('#statusMotor4').html(state_slider_Motor4 + ' %');
@@ -145,4 +262,6 @@ R"(
     });
 </script>
 </html>
+
+
 )";

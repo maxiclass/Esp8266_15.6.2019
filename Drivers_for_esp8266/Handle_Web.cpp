@@ -67,6 +67,7 @@ void setupServer()
 	server.on("/blueFunction", blueFunction);
 	server.on("/Motor4Function", Motor4Function);
 	server.on("/MoveServoFunction", MoveServoFunction);
+	server.on("/vSend_Mpu_data_to_web", vSend_Mpu_data_to_web);
 	// 
 	 //start the server
 	server.begin();
@@ -145,6 +146,15 @@ void Motor4Function()
 	server.send(200, "text/html", "Motor4");
 }
 
+void vSend_Mpu_data_to_web()
+{
+	String adcValue = "555";
+		server.send(200, "text/plain", adcValue);
+
+
+}
+
+
 void ControlLedsRandom()
 {
 	
@@ -201,22 +211,10 @@ void ScheduleTime1()
 	u32milisecondsCounter++;
 
 
-
-	//remap the analog value to a new range (from 0 to 180) as the
-	//servo can turn max 180 degrees.
-	//value = map(value, 0, 1024, 0, 180);
-	//servo1.write(value);
-
-
-
-
-
-
 	//activate 1 second interruput
 	if ((u32milisecondsCounter % 1000) == 0)
 	{
-		//int value = analogRead(A0);
-		//     Serial.println(value);
+
 		//value = map(value, 0, 1024, 0, 180);
 		//servo1.write(value);
 		//Serial.println(servo1.read());
@@ -225,6 +223,7 @@ void ScheduleTime1()
 		//ControlLedsRandom();
 
 		vprint_Mpu_data();
+
 	}
 
 

@@ -11,7 +11,7 @@ void setup()
   connectToWiFi();
   setupServer();
   InitTimer1();
-  analogWriteFreq(60) ; // should give 60 Hz
+//  analogWriteFreq(60) ; // should give 60 Hz
 }
 
 void loop()
