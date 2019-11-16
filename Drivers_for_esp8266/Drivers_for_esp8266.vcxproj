@@ -127,6 +127,7 @@
     <ClInclude Include="DHT_11_driver.h" />
     <ClInclude Include="Handle_Web.h" />
     <ClInclude Include="Header.h" />
+    <ClInclude Include="Motors.h" />
     <ClInclude Include="index.h" />
     <ClInclude Include="MpuControl.h" />
     <ClInclude Include="ShareableResources.h" />
@@ -143,6 +144,7 @@
     <ClCompile Include="Handle_Web.cpp" />
     <ClCompile Include="MpuControl.cpp" />
     <ClCompile Include="ShareableResources.cpp" />
+    <ClCompile Include="Motors.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

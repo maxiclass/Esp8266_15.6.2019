@@ -19,11 +19,11 @@
     <Filter Include="Resource Files\ShareableResources">
       <UniqueIdentifier>{6f4a6a42-4c6d-40f0-b569-0d3016f469fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Servo_control">
-      <UniqueIdentifier>{40052153-43c0-48f6-9bc9-2de15c90761a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Control">
       <UniqueIdentifier>{6c68b68e-eb40-40c7-964a-6b862e0f3210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Motors">
+      <UniqueIdentifier>{40052153-43c0-48f6-9bc9-2de15c90761a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +47,9 @@
     </ClInclude>
     <ClInclude Include="MpuControl.h">
       <Filter>Resource Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Motors.h">
+      <Filter>Resource Files\Motors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="MpuControl.cpp">
       <Filter>Resource Files\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Motors.cpp">
+      <Filter>Resource Files\Motors</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

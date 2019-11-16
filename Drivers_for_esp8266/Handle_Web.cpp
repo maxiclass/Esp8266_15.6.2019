@@ -8,7 +8,7 @@ const char* password = "Parola12";
 const int frequency = 60;  //60hz
 const int resolution = 8;
 const int maxvalue = 254; //max value for pwm's
-Servo servo1;                        //variable for servo
+Servo servo1;                        //class for servo
 
 String page = MAIN_page; //Read HTML contents
 //the htmlIndex() is called everytime somebody access the address
@@ -67,8 +67,20 @@ void setupServer()
 	server.on("/blueFunction", blueFunction);
 	server.on("/Motor4Function", Motor4Function);
 	server.on("/MoveServoFunction", MoveServoFunction);
-	server.on("/vSend_Mpu_data_to_web", vSend_Mpu_data_to_web);
-	// 
+
+	// server for MPU DATA
+	server.on("/vSend_Mpu_Ax_to_web", vSend_Mpu_Ax_to_web);
+	server.on("/vSend_Mpu_Ay_to_web", vSend_Mpu_Ay_to_web);
+	server.on("/vSend_Mpu_Az_to_web", vSend_Mpu_Az_to_web);
+
+	server.on("/vSend_Mpu_Gx_to_web", vSend_Mpu_Gx_to_web);
+	server.on("/vSend_Mpu_Gy_to_web", vSend_Mpu_Gy_to_web);
+	server.on("/vSend_Mpu_Gz_to_web", vSend_Mpu_Gz_to_web);
+
+	server.on("/vSend_Mpu_Mx_to_web", vSend_Mpu_Gx_to_web);
+	server.on("/vSend_Mpu_My_to_web", vSend_Mpu_Gy_to_web);
+	server.on("/vSend_Mpu_Mz_to_web", vSend_Mpu_Gz_to_web);
+	
 	 //start the server
 	server.begin();
 
@@ -146,26 +158,52 @@ void Motor4Function()
 	server.send(200, "text/html", "Motor4");
 }
 
-void vSend_Mpu_data_to_web()
+
+
+//functions for sending web data from MPU -> ACC
+
+void vSend_Mpu_Ax_to_web()
 {
-	//String adcValue = String(fWebAccx);
 		server.send(200, "text/plain", String(fGetMpuStrAx()));
-
-
 }
 
+ void vSend_Mpu_Ay_to_web()
+ {
+	 server.send(200, "text/plain", String(fGetMpuStrAy()));
+ }
 
-void ControlLedsRandom()
-{
-	
-	analogWrite(blue, (rand() % 1023));
-	analogWrite(green, (rand() % 1023));
-	analogWrite(red, (rand() % 1023));
-	analogWrite(Motor4PIN, (rand() % 1023));
-	servo1.write((rand() % 100));
-}
+ void vSend_Mpu_Az_to_web()
+ {
+	 server.send(200, "text/plain", String(fGetMpuStrAz()));
+ }
 
+//functions for sending web data from MPU -> GYR
+ void vSend_Mpu_Gx_to_web()
+ {
+	 server.send(200, "text/plain", String(fGetMpuStrGx()));
+ }
+ void vSend_Mpu_Gy_to_web()
+ {
+	 server.send(200, "text/plain", String(fGetMpuStrGy()));
+ }
+void vSend_Mpu_Gz_to_web()
+	 {
+	 server.send(200, "text/plain", String(fGetMpuStrGz()));
+	 }
 
+//functions for sending web data from MPU -> MAG
+ void vSend_Mpu_Mx_to_web()
+ {
+	 server.send(200, "text/plain", String(fGetMpuStrMx()));
+ }
+ void vSend_Mpu_My_to_web()
+ {
+	 server.send(200, "text/plain", String(fGetMpuStrMy()));
+ }
+ void vSend_Mpu_Mz_to_web()
+ {
+	 server.send(200, "text/plain", String(fGetMpuStrMz()));
+ }
 
 
 volatile unsigned long next;

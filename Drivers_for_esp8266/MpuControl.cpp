@@ -74,12 +74,36 @@ float fGetMpuStrAy()
 {
 	return mpuprocessing.fAy;
 }
-
 float  fGetMpuStrAz()
 {
 	return  mpuprocessing.fAz;
 }
 
+float fGetMpuStrGx()
+{
+	return mpuprocessing.fGx;
+}
+float fGetMpuStrGy()
+{
+	return mpuprocessing.fGy;
+}
+float  fGetMpuStrGz()
+{
+	return  mpuprocessing.fGz;
+}
+
+float fGetMpuStrMx()
+{
+	return mpuprocessing.fMx;
+}
+float fGetMpuStrMy()
+{
+	return mpuprocessing.fMy;
+}
+float  fGetMpuStrMz()
+{
+	return  mpuprocessing.fMz;
+}
 
 
 

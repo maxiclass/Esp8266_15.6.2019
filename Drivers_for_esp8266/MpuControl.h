@@ -13,7 +13,13 @@ extern float fGetMpuStrAx();
 extern float fGetMpuStrAy();
 extern float fGetMpuStrAz();
 
+extern float fGetMpuStrGx();
+extern float fGetMpuStrGy();
+extern float fGetMpuStrGz();
 
+extern float fGetMpuStrMx();
+extern float fGetMpuStrMy();
+extern float fGetMpuStrMz();
 
 
 

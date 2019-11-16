@@ -13,9 +13,6 @@ R"(
 
 
 
-
-
-
 <html lang='en'>
 <head>
     <title>Dim an RGB LED</title>
@@ -111,8 +108,8 @@ R"(
     }
 
     .sensor_representation_B {
-       position: absolute;
-  left: +200px;
+        position: absolute;
+        left: +200px;
         max-width: 150px;
         min-height: 100px;
         background: #02b875;
@@ -124,7 +121,7 @@ R"(
     }
 
     .sensor_representation_C {
-          position: absolute;
+        position: absolute;
         left: +400px;
         max-width: 150px;
         min-height: 100px;
@@ -180,22 +177,128 @@ R"(
 
 <script>
 
-setInterval(function() {
-  // Call a function repetatively with 2 Second interval
-  getData();
-}, 2000); //2000mSeconds update rate
- 
-function getData() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("AccelermeterValueX").innerHTML =
-      this.responseText;
+    setInterval(function () {
+        // Call a function repetatively with 2 Second interval
+        getData();
+    }, 10); //10mSeconds update rate
+
+    function getData() {
+        vSend_Mpu_Ax_to_web();
+        vSend_Mpu_Ay_to_web();
+        vSend_Mpu_Az_to_web();
+
+        vSend_Mpu_Gx_to_web();
+        vSend_Mpu_Gy_to_web();
+        vSend_Mpu_Gz_to_web();
+
+        vSend_Mpu_Mx_to_web();
+        vSend_Mpu_My_to_web();
+        vSend_Mpu_Mz_to_web();
     }
-  };
-  xhttp.open("GET", "vSend_Mpu_data_to_web", true);
-  xhttp.send();
-}
+
+//functions for sending web data from MPU -> ACC
+    function vSend_Mpu_Ax_to_web()
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("AccelermeterValueX").innerHTML =
+                    this.responseText;
+            }
+        };
+        xhttp.open("GET", "vSend_Mpu_Ax_to_web", true);
+        xhttp.send();
+    }
+    function vSend_Mpu_Ay_to_web()
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("AccelermeterValueY").innerHTML = this.responseText;}
+        };
+        xhttp.open("GET", "vSend_Mpu_Ay_to_web", true);
+        xhttp.send();
+    }
+    function vSend_Mpu_Az_to_web()
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("AccelermeterValueZ").innerHTML =
+                    this.responseText;
+            }
+        };
+        xhttp.open("GET", "vSend_Mpu_Az_to_web", true);
+        xhttp.send();
+    }
+
+//functions for sending web data from MPU -> GYR
+    function vSend_Mpu_Gx_to_web()
+        {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("GyroscopeValueX").innerHTML = this.responseText;}
+        };
+        xhttp.open("GET", "vSend_Mpu_Gx_to_web", true);
+        xhttp.send();
+    }
+    function vSend_Mpu_Gy_to_web()
+        {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("GyroscopeValueY").innerHTML = this.responseText;}
+        };
+        xhttp.open("GET", "vSend_Mpu_Gy_to_web", true);
+        xhttp.send();
+    }
+    function vSend_Mpu_Gz_to_web()
+        {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("GyroscopeValueZ").innerHTML = this.responseText;}
+        };
+        xhttp.open("GET", "vSend_Mpu_Gz_to_web", true);
+        xhttp.send();
+    }
+//functions for sending web data from MPU -> MAG
+
+    function vSend_Mpu_Mx_to_web()
+        {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("MagnetormeterValueX").innerHTML = this.responseText;}
+        };
+        xhttp.open("GET", "vSend_Mpu_Mx_to_web", true);
+        xhttp.send();
+    }
+    function vSend_Mpu_My_to_web()
+        {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("MagnetormeterValueY").innerHTML = this.responseText;}
+        };
+        xhttp.open("GET", "vSend_Mpu_My_to_web", true);
+        xhttp.send();
+    }
+    function vSend_Mpu_Mz_to_web()
+        {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("MagnetormeterValueZ").innerHTML = this.responseText;}
+        };
+        xhttp.open("GET", "vSend_Mpu_Mz_to_web", true);
+        xhttp.send();
+    }
+
+
+
+
 
 
 
@@ -262,6 +365,10 @@ function getData() {
     });
 </script>
 </html>
+
+
+
+
 
 
 )";
