@@ -57,7 +57,32 @@ void vprint_Mpu_data()//read and print raw data from the sensors
 	Serial.print("Temperature " );
 	Serial.println(mpuprocessing.fTemperature);
 
+	//
+	
+	//fWebAccz = mpuprocessing.fAz;
+
+
+
 }
+
+
+float fGetMpuStrAx()
+{
+	return mpuprocessing.fAx;
+}
+float fGetMpuStrAy()
+{
+	return mpuprocessing.fAy;
+}
+
+float  fGetMpuStrAz()
+{
+	return  mpuprocessing.fAz;
+}
+
+
+
+
 
 
 void vProcess_Mpu_data()//read and process data from the sensors

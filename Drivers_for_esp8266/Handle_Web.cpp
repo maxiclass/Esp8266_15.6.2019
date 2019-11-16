@@ -148,8 +148,8 @@ void Motor4Function()
 
 void vSend_Mpu_data_to_web()
 {
-	String adcValue = "555";
-		server.send(200, "text/plain", adcValue);
+	//String adcValue = String(fWebAccx);
+		server.send(200, "text/plain", String(fGetMpuStrAx()));
 
 
 }

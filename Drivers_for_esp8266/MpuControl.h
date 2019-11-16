@@ -9,6 +9,13 @@ extern void vprint_Mpu_data();
 extern void vInit_Mpu();
 extern void vProcess_Mpu_data();
 
+extern float fGetMpuStrAx();
+extern float fGetMpuStrAy();
+extern float fGetMpuStrAz();
+
+
+
+
 
  class MPU_PROCESSING
 {
