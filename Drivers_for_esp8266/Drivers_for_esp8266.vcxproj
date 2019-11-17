@@ -124,7 +124,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Control.h" />
-    <ClInclude Include="DHT_11_driver.h" />
     <ClInclude Include="Handle_Web.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Motors.h" />
@@ -140,7 +139,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Control.cpp" />
-    <ClCompile Include="DHT_11_driver.cpp" />
     <ClCompile Include="Handle_Web.cpp" />
     <ClCompile Include="MpuControl.cpp" />
     <ClCompile Include="ShareableResources.cpp" />

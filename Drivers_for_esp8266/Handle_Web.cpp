@@ -99,8 +99,8 @@ void HandleWebClient()
 
 void MoveServoFunction()
 {
-	int	valueServo = server.arg("statusServo").toInt();	
-	servo1.write(valueServo);
+	//int	valueServo = server.arg("statusServo").toInt();	
+	//servo1.write(valueServo);
 }
 
 //function for controlling the red LED
@@ -211,15 +211,9 @@ volatile unsigned long next;
 void DriversInit()
 
 {
-	pinMode(ServoPin, OUTPUT);
-	servo1.attach(ServoPin);
-	servo1.write(0);
-	pinMode(red, OUTPUT);
-	pinMode(green, OUTPUT);
-	pinMode(blue, OUTPUT);
-	pinMode(Motor4PIN, OUTPUT);
-	//pinMode(TrigerSensorHC, OUTPUT); // Sets the trigPin as an Output
-	//pinMode(EchoSensorHC, INPUT); // Sets the echoPin as an Input
+	vCustomizeMotorClass(); // Alocate Pins for each motor and also all the other important values
+	vInitServoMotors();
+
 	//start the Serial communication at 115200 bits/s
 	Serial.begin(115200);
 
@@ -258,7 +252,6 @@ void ScheduleTime1()
 		//Serial.println(servo1.read());
 		//Serial.println(u32milisecondsCounter);
 		vDoIsr1Sec();
-		//ControlLedsRandom();
 
 		vprint_Mpu_data();
 

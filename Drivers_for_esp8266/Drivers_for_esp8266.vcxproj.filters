@@ -42,9 +42,6 @@
     <ClInclude Include="Control.h">
       <Filter>Resource Files\Control</Filter>
     </ClInclude>
-    <ClInclude Include="DHT_11_driver.h">
-      <Filter>Resource Files\Control</Filter>
-    </ClInclude>
     <ClInclude Include="MpuControl.h">
       <Filter>Resource Files\Control</Filter>
     </ClInclude>
@@ -68,9 +65,6 @@
       <Filter>Resource Files\ShareableResources</Filter>
     </ClCompile>
     <ClCompile Include="Control.cpp">
-      <Filter>Resource Files\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="DHT_11_driver.cpp">
       <Filter>Resource Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="MpuControl.cpp">
