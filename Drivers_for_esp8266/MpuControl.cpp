@@ -1,5 +1,6 @@
 #pragma once
 #include "MpuControl.h"
+#include <cstdint>
 
 
 MPU9255 mpu;
@@ -28,6 +29,14 @@ void vprint_Mpu_data()//read and print raw data from the sensors
 {
 	vProcess_Mpu_data();
 	
+	//PRINT ACCELEROSCOPE MEASUREMENT
+	Serial.print("AX: ");
+	Serial.print(mpu.ax);
+	Serial.print("    AY: ");
+	Serial.print(mpu.ay);
+	Serial.print("    AZ: ");
+	Serial.println(mpu.az);
+
 	//PRINT ACCELEROSCOPE MEASUREMENT
 	Serial.print("AX: ");
 	Serial.print(mpuprocessing.fAx);
@@ -103,6 +112,52 @@ float  fGetMpuStrMz()
 {
 	return  mpuprocessing.fMz;
 }
+
+
+
+
+
+
+int16_t s16GetMpuStrAx()
+{
+	return mpu.ax;
+}
+int16_t s16GetMpuStrAy()
+{
+	return mpu.ay;
+}
+int16_t  s16GetMpuStrAz()
+{
+	return  mpu.az;
+}
+
+int16_t s16GetMpuStrGx()
+{
+	return mpu.gx;
+}
+int16_t s16GetMpuStrGy()
+{
+	return mpu.gy;
+}
+int16_t  s16GetMpuStrGz()
+{
+	return  mpu.gz;
+}
+
+int16_t s16GetMpuStrMx()
+{
+	return mpu.gx;
+}
+int16_t s16GetMpuStrMy()
+{
+	return mpu.gy;
+}
+int16_t  s16GetMpuStrMz()
+{
+	return  mpu.gz;
+}
+
+
 
 
 

@@ -72,9 +72,24 @@ void u32ControlMotorSpeed(uint32_t MotorFrontLeftValue, uint32_t MotorFrontRight
 	Motor_Back_Left.u32ServoValue = MotorBackLeftValue;
 	Motor_Back_Right.u32ServoValue = MotorBackRightValue;
 
+	if (Motor_Front_Left.u32ServoValue == 0) { digitalWrite(Motor_Front_Left.u8ServoPin, LOW); }//turn of the motor}
+	if (Motor_Front_Right.u32ServoValue == 0) { digitalWrite(Motor_Front_Right.u8ServoPin, LOW); }//turn of the motor}
+	if (Motor_Back_Left.u32ServoValue == 0) { digitalWrite(Motor_Back_Left.u8ServoPin, LOW); }//turn of the motor}
+	if (Motor_Back_Right.u32ServoValue == 0) { digitalWrite(Motor_Back_Right.u8ServoPin, LOW); }//turn of the motor}
+
+
 	ServoMotor_Front_Left.write(Motor_Front_Left.u32ServoValue);
 	ServoMotor_Front_Right.write(Motor_Front_Right.u32ServoValue);
 	ServoMotor_Back_Left.write(Motor_Back_Left.u32ServoValue);
-	ServoMotor_Back_Right.write(Motor_Back_Right.u32ServoValue);
+
+	Serial.print("MFL: ");
+	Serial.print(Motor_Front_Left.u32ServoValue);
+	Serial.print("    MFR: ");
+	Serial.print(Motor_Front_Right.u32ServoValue);
+	Serial.print("    MBL: ");
+	Serial.print(Motor_Back_Left.u32ServoValue);
+	Serial.print("    MBR: ");
+	Serial.println(Motor_Back_Right.u32ServoValue);
+
 
 }

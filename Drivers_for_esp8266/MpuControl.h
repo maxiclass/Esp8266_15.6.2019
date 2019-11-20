@@ -23,6 +23,18 @@ extern float fGetMpuStrMx();
 extern float fGetMpuStrMy();
 extern float fGetMpuStrMz();
 
+extern int16_t s16GetMpuStrAx();
+extern int16_t s16GetMpuStrAy();
+extern int16_t s16GetMpuStrAz();
+
+extern int16_t s16GetMpuStrGx();
+extern int16_t s16GetMpuStrGy();
+extern int16_t s16GetMpuStrGz();
+
+extern int16_t s16GetMpuStrMx();
+extern int16_t s16GetMpuStrMy();
+extern int16_t s16GetMpuStrMz();
+
 
 
  class MPU_PROCESSING

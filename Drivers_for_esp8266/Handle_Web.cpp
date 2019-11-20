@@ -69,18 +69,7 @@ void setupServer()
 	server.on("/MoveServoFunction", MoveServoFunction);
 
 	// server for MPU DATA
-	server.on("/vSend_Mpu_Ax_to_web", vSend_Mpu_Ax_to_web);
-	server.on("/vSend_Mpu_Ay_to_web", vSend_Mpu_Ay_to_web);
-	server.on("/vSend_Mpu_Az_to_web", vSend_Mpu_Az_to_web);
 
-	server.on("/vSend_Mpu_Gx_to_web", vSend_Mpu_Gx_to_web);
-	server.on("/vSend_Mpu_Gy_to_web", vSend_Mpu_Gy_to_web);
-	server.on("/vSend_Mpu_Gz_to_web", vSend_Mpu_Gz_to_web);
-
-	server.on("/vSend_Mpu_Mx_to_web", vSend_Mpu_Gx_to_web);
-	server.on("/vSend_Mpu_My_to_web", vSend_Mpu_Gy_to_web);
-	server.on("/vSend_Mpu_Mz_to_web", vSend_Mpu_Gz_to_web);
-	
 	 //start the server
 	server.begin();
 
@@ -159,53 +148,6 @@ void Motor4Function()
 }
 
 
-
-//functions for sending web data from MPU -> ACC
-
-void vSend_Mpu_Ax_to_web()
-{
-		server.send(200, "text/plain", String(fGetMpuStrAx()));
-}
-
- void vSend_Mpu_Ay_to_web()
- {
-	 server.send(200, "text/plain", String(fGetMpuStrAy()));
- }
-
- void vSend_Mpu_Az_to_web()
- {
-	 server.send(200, "text/plain", String(fGetMpuStrAz()));
- }
-
-//functions for sending web data from MPU -> GYR
- void vSend_Mpu_Gx_to_web()
- {
-	 server.send(200, "text/plain", String(fGetMpuStrGx()));
- }
- void vSend_Mpu_Gy_to_web()
- {
-	 server.send(200, "text/plain", String(fGetMpuStrGy()));
- }
-void vSend_Mpu_Gz_to_web()
-	 {
-	 server.send(200, "text/plain", String(fGetMpuStrGz()));
-	 }
-
-//functions for sending web data from MPU -> MAG
- void vSend_Mpu_Mx_to_web()
- {
-	 server.send(200, "text/plain", String(fGetMpuStrMx()));
- }
- void vSend_Mpu_My_to_web()
- {
-	 server.send(200, "text/plain", String(fGetMpuStrMy()));
- }
- void vSend_Mpu_Mz_to_web()
- {
-	 server.send(200, "text/plain", String(fGetMpuStrMz()));
- }
-
-
 volatile unsigned long next;
 
 void DriversInit()
@@ -242,12 +184,12 @@ void ScheduleTime1()
 
 	u32milisecondsCounter++;
 
-	vSystemDroneControl();
+
 
 	//activate 1 second interruput
 	if ((u32milisecondsCounter % 1000) == 0)
 	{
-
+		vSystemDroneControl();
 		//value = map(value, 0, 1024, 0, 180);
 		//servo1.write(value);
 		//Serial.println(servo1.read());
