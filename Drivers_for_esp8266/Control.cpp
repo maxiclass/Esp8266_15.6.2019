@@ -4,7 +4,6 @@
 #include "Math.h"
 
 
-
 void vSystemDroneControl() // this function must be handled by a interrupt rutine
 {
 
@@ -40,9 +39,6 @@ void vSystemDroneControl() // this function must be handled by a interrupt rutin
 			MotorBackRightValue = 0;
 	}
 
-
-	
 		u32ControlMotorSpeed(MotorFrontLeftValue, MotorFrontRightValue, MotorBackLeftValue, MotorBackRightValue);
-
-
 }
+

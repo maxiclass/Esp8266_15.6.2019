@@ -184,21 +184,25 @@ void ScheduleTime1()
 
 	u32milisecondsCounter++;
 
-
-
 	//activate 1 second interruput
-	if ((u32milisecondsCounter % 1000) == 0)
+	if ((u32milisecondsCounter % 100) == 0)
 	{
-		vSystemDroneControl();
-		//value = map(value, 0, 1024, 0, 180);
-		//servo1.write(value);
-		//Serial.println(servo1.read());
-		//Serial.println(u32milisecondsCounter);
-		vDoIsr1Sec();
+		//vSystemDroneControl();
+		vPIDSystemControl();
 
-		vprint_Mpu_data();
+		//activate 1 second interruput
+		if ((u32milisecondsCounter % 1000) == 0)
+		{
+			//vSystemDroneControl();
+			vDoIsr1Sec();
+			//vprint_Mpu_data();
+
+		}
+
 
 	}
+
+
 
 
 }

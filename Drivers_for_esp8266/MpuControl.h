@@ -35,6 +35,8 @@ extern int16_t s16GetMpuStrMx();
 extern int16_t s16GetMpuStrMy();
 extern int16_t s16GetMpuStrMz();
 
+extern void vPIDSystemControl();
+
 
 
  class MPU_PROCESSING
@@ -58,6 +60,16 @@ public :
 
 	//float data for Temperature processing
 	float fTemperature = 0;
+
+	double R11 = 0;
+	double R21 = 0;
+	double R31 = 0;
+	double R32 = 0;
+	double R33 = 0;
+
+	double phi = 0;
+	double theta = 0;
+	double psi = 0;
 
 private :
 

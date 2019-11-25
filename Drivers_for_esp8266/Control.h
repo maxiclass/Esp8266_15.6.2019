@@ -3,9 +3,7 @@
 #include "Motors.h"
 #include <cstdint>
 
-void vSystemDroneControl();
-
-
+extern void vSystemDroneControl();
 
 class SystemControl
 {

@@ -48,6 +48,9 @@
     <ClInclude Include="Motors.h">
       <Filter>Resource Files\Motors</Filter>
     </ClInclude>
+    <ClInclude Include="MadgwickAHRS.h">
+      <Filter>Resource Files\Control</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Main\Main.ino">
@@ -72,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="Motors.cpp">
       <Filter>Resource Files\Motors</Filter>
+    </ClCompile>
+    <ClCompile Include="MadgwickAHRS.cpp">
+      <Filter>Resource Files\Control</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

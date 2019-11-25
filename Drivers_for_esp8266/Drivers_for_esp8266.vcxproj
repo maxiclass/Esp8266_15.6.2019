@@ -126,6 +126,7 @@
     <ClInclude Include="Control.h" />
     <ClInclude Include="Handle_Web.h" />
     <ClInclude Include="Header.h" />
+    <ClInclude Include="MadgwickAHRS.h" />
     <ClInclude Include="Motors.h" />
     <ClInclude Include="index.h" />
     <ClInclude Include="MpuControl.h" />
@@ -140,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Control.cpp" />
     <ClCompile Include="Handle_Web.cpp" />
+    <ClCompile Include="MadgwickAHRS.cpp" />
     <ClCompile Include="MpuControl.cpp" />
     <ClCompile Include="ShareableResources.cpp" />
     <ClCompile Include="Motors.cpp" />

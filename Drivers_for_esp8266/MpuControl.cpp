@@ -1,6 +1,7 @@
 #pragma once
 #include "MpuControl.h"
 #include <cstdint>
+#include  "MadgwickAHRS.h"
 
 
 MPU9255 mpu;
@@ -239,4 +240,30 @@ void vProcess_Mpu_data()//read and process data from the sensors
 }
 
 
+void vPIDSystemControl()
+{
+	vProcess_Mpu_data();
+
+	MadgwickAHRSupdate(mpuprocessing.fGx, mpuprocessing.fGy, mpuprocessing.fGz, \
+					   mpuprocessing.fAx, mpuprocessing.fAy, mpuprocessing.fAz,\
+					   mpuprocessing.fMx, mpuprocessing.fMy, mpuprocessing.fMz);
+
+	 mpuprocessing.R11 = 2. * q0 * q0 - 1 + 2. * q1 * q1;
+	 mpuprocessing.R21 = 2. * (q1 * q2 - q0 * q3);
+	 mpuprocessing.R31 = 2. * (q1 * q3 + q0 * q2);
+	 mpuprocessing.R32 = 2. * (q2 * q3 - q0 * q1);
+	 mpuprocessing.R33 = 2. * q0 * q0 - 1 + 2. * q3 * q3;
+
+	 mpuprocessing.phi = atan2(mpuprocessing.R32, mpuprocessing.R33);
+	 mpuprocessing.theta = -atan(mpuprocessing.R31 / sqrt(1 - mpuprocessing.R31 * mpuprocessing.R31));
+	 mpuprocessing.psi = atan2(mpuprocessing.R21, mpuprocessing.R11);
+
+	 Serial.print("phi: ");
+	 Serial.print(mpuprocessing.phi);
+	 Serial.print("    theta: ");
+	 Serial.print(mpuprocessing.theta);
+	 Serial.print("    psi: ");
+	 Serial.println(mpuprocessing.psi);
+
+}
 
