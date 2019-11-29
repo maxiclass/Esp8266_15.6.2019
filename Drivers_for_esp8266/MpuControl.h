@@ -1,5 +1,5 @@
 
-
+#include <cstdint>
 #include "MPU9255.h"//include MPU9255 library
 
 #define gravity 9.81 // 1g ~ 9.81 m/s^2
@@ -10,6 +10,8 @@
 extern void vprint_Mpu_data(); 
 extern void vInit_Mpu();
 extern void vProcess_Mpu_data();
+
+extern void vInit_MpuCalibration();//init MPU calibration
 
 extern float fGetMpuStrAx();
 extern float fGetMpuStrAy();
@@ -36,13 +38,13 @@ extern int16_t s16GetMpuStrMy();
 extern int16_t s16GetMpuStrMz();
 
 extern void vPIDSystemControl();
-
+extern void vPrintEulerAngles();
 
 
  class MPU_PROCESSING
 {
 public :
-	
+	 boolean bMPUInitState=0;
 	//float data for Accelerometer processing
 	float fAx=0;
 	float fAy=0;

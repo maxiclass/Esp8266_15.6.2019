@@ -1,18 +1,22 @@
 #pragma once
 #include "MpuControl.h"
-#include <cstdint>
+
 #include  "MadgwickAHRS.h"
+#include "ShareableResources.h"
 
 
 MPU9255 mpu;
 MPU_PROCESSING mpuprocessing;
-
+float rad_to_deg = 180 / M_PI;
+double offsetPHI=0.03;
+double offsetPSI = 0.03;
+double offsetTHETA = 0.03;
+float elapsedTime, timenow, timePrev;
 
 void vInit_Mpu()//init MPU reading
 {
-	mpu.init();
-
-
+	
+	mpuprocessing.bMPUInitState = mpu.init();
 
 	mpu.enable(Acc_X);
 	mpu.enable(Acc_Y);
@@ -24,6 +28,243 @@ void vInit_Mpu()//init MPU reading
 
 	mpu.set_acc_scale(scale_2g);//set accelerometer scale
 	mpu.set_gyro_scale(scale_250dps);//set gyroscope scale
+	vInit_MpuCalibration();
+}
+
+
+void vInit_MpuCalibration()//init MPU calibration
+{ //set bandwidths to 5Hz to reduce the noise
+	mpu.set_acc_bandwidth(acc_5Hz);
+	mpu.set_gyro_bandwidth(gyro_5Hz);
+
+	int16_t gX_offset = 0;//gyroscope X axis offset
+	int16_t gY_offset = 0;//gyroscope Y axis offset
+	int16_t gZ_offset = 0;//gyroscope Z axis offset
+
+	int16_t aX_offset = 0;//accelerometer X axis offset
+	int16_t aY_offset = 0;//accelerometer Y axis offset
+	int16_t aZ_offset = 0;//accelerometer Z axis offset
+
+	//update flags
+
+	//gyroscope
+	bool update_gX = true;
+	bool update_gY = true;
+	bool update_gZ = true;
+
+	//accelerometer
+	bool update_aX = true;
+	bool update_aY = true;
+	bool update_aZ = true;
+
+	//discard the first reading
+	mpu.read_acc();
+	mpu.read_gyro();
+	delay(10);
+
+	while (1)//offset adjusting loop
+	{
+		mpu.read_acc();
+		mpu.read_gyro();
+
+		//-------- adjust accelerometer X axis offset ----------
+
+		if (mpu.ax > 0 && update_aX == true)//if X axis readings are greater than 0
+		{
+			aX_offset--;//decrement offset
+		}
+
+
+		if (mpu.ax < 0 && update_aX == true)
+		{
+			aX_offset++;//increment offset
+		}
+
+		//-------- adjust accelerometer Y axis offset ----------
+
+		if (mpu.ay > 0 && update_aY == true)//if X axis readings are greater than 0
+		{
+			aY_offset--;//decrement offset
+		}
+
+		if (mpu.ay < 0 && update_aY == true)
+		{
+			aY_offset++;//increment offset
+		}
+
+		//-------- adjust accelerometer Z axis offset ----------
+
+		if (mpu.az > 0 && update_aZ == true)//if X axis readings are greater than 0
+		{
+			aZ_offset--;//decrement offset
+		}
+
+		if (mpu.az < 0 && update_aZ == true)
+		{
+			aZ_offset++;//increment offset
+		}
+
+		//-------- adjust gyroscope X axis offset ----------
+
+		if (mpu.gx > 0 && update_gX == true)//if X axis readings are greater than 0
+		{
+			gX_offset--;//decrement offset
+		}
+
+		if (mpu.gx < 0 && update_gX == true)
+		{
+			gX_offset++;//increment offset
+		}
+
+		//-------- adjust gyroscope Y axis offset ----------
+
+		if (mpu.gy > 0 && update_gY == true)//if X axis readings are greater than 0
+		{
+			gY_offset--;//decrement offset
+		}
+
+		if (mpu.gy < 0 && update_gY == true)
+		{
+			gY_offset++;//increment offset
+		}
+
+		//-------- adjust gyroscope Z axis offset ----------
+
+		if (mpu.gz > 0 && update_gZ == true)//if X axis readings are greater than 0
+		{
+			gZ_offset--;//decrement offset
+		}
+
+		if (mpu.gz < 0 && update_gZ == true)
+		{
+			gZ_offset++;//increment offset
+		}
+
+		//print data
+		Serial.print("AX: ");
+		Serial.print(mpu.ax);
+		Serial.print(" (Offset: ");
+		Serial.print(aX_offset);
+		Serial.print(" ) ");
+		Serial.print(" AY: ");
+		Serial.print(mpu.ay);
+		Serial.print(" (Offset: ");
+		Serial.print(aY_offset);
+		Serial.print(" ) ");
+		Serial.print(" AZ: ");
+		Serial.print(mpu.az);
+		Serial.print(" (Offset: ");
+		Serial.print(aZ_offset);
+		Serial.print(" ) ");
+		Serial.print("    GX: ");
+		Serial.print(mpu.gx);
+		Serial.print(" (Offset: ");
+		Serial.print(gX_offset);
+		Serial.print(" ) ");
+		Serial.print(" GY: ");
+		Serial.print(" (Offset: ");
+		Serial.print(gY_offset);
+		Serial.print(" ) ");
+		Serial.print(mpu.gy);
+		Serial.print(" GZ: ");
+		Serial.print(mpu.gz);
+		Serial.print(" (Offset: ");
+		Serial.print(gZ_offset);
+		Serial.println(" ) ");
+
+		//set new offset
+		if (update_gX == true)
+		{
+			mpu.set_gyro_offset(X_axis, gX_offset);
+		}
+
+		if (update_gY == true)
+		{
+			mpu.set_gyro_offset(Y_axis, gY_offset);
+		}
+
+		if (update_gZ == true)
+		{
+			mpu.set_gyro_offset(Z_axis, gZ_offset);
+		}
+
+		if (update_aX == true)
+		{
+			mpu.set_acc_offset(X_axis, aX_offset);
+		}
+
+		if (update_aY == true)
+		{
+			mpu.set_acc_offset(Y_axis, aY_offset);
+		}
+
+		if (update_aZ == true)
+		{
+			mpu.set_acc_offset(Z_axis, aZ_offset);
+		}
+
+		//------ Check if each axis is adjusted -----
+		const short maximum_error = 5;//set maximum deviation to 5 LSB
+		if ((mpu.ax - maximum_error) <= 0)
+		{
+
+		}
+
+		if ((abs(mpu.ax) - maximum_error) <= 0)
+		{
+			update_aX = false;
+		}
+
+		if ((abs(mpu.ay) - maximum_error) <= 0)
+		{
+			update_aY = false;
+		}
+
+		if ((abs(mpu.az) - maximum_error) <= 0)
+		{
+			update_aZ = false;
+		}
+
+		if ((abs(mpu.gx) - maximum_error) <= 0)
+		{
+			update_gX = false;
+		}
+
+		if ((abs(mpu.gy) - maximum_error) <= 0)
+		{
+			update_gY = false;
+		}
+
+		if ((abs(mpu.gz) - maximum_error) <= 0)
+		{
+			update_gZ = false;
+		}
+
+
+		//------ Adjust procedure end condition ------
+		if (update_gX == false && update_gY == false && update_gZ == false && update_aX == false && update_aY == false && update_aZ == false)
+		{
+			break;
+		}
+
+		delay(10);
+	}
+	//print the output values :
+	Serial.println("Offset cancellation complete!");
+	Serial.println();
+	Serial.print("Accelerometer offset:  X: ");
+	Serial.print(aX_offset);
+	Serial.print("  Y: ");
+	Serial.print(aY_offset);
+	Serial.print("  Z: ");
+	Serial.println(aZ_offset);
+	Serial.print("Gyroscope offset:   X: ");
+	Serial.print(gX_offset);
+	Serial.print("  Y: ");
+	Serial.print(gY_offset);
+	Serial.print("  Z: ");
+	Serial.println(gZ_offset);
+	Serial.println();
 }
 
 void vprint_Mpu_data()//read and print raw data from the sensors
@@ -254,16 +495,21 @@ void vPIDSystemControl()
 	 mpuprocessing.R32 = 2. * (q2 * q3 - q0 * q1);
 	 mpuprocessing.R33 = 2. * q0 * q0 - 1 + 2. * q3 * q3;
 
-	 mpuprocessing.phi = atan2(mpuprocessing.R32, mpuprocessing.R33);
-	 mpuprocessing.theta = -atan(mpuprocessing.R31 / sqrt(1 - mpuprocessing.R31 * mpuprocessing.R31));
-	 mpuprocessing.psi = atan2(mpuprocessing.R21, mpuprocessing.R11);
-
-	 Serial.print("phi: ");
-	 Serial.print(mpuprocessing.phi);
-	 Serial.print("    theta: ");
-	 Serial.print(mpuprocessing.theta);
-	 Serial.print("    psi: ");
-	 Serial.println(mpuprocessing.psi);
-
+	 mpuprocessing.phi = ((atan2(mpuprocessing.R32, mpuprocessing.R33)) * rad_to_deg);
+	 mpuprocessing.theta = (-atan(mpuprocessing.R31 / sqrt(1 - mpuprocessing.R31 * mpuprocessing.R31)))* rad_to_deg;
+	 mpuprocessing.psi = (atan2(mpuprocessing.R21, mpuprocessing.R11))* rad_to_deg;
 }
 
+void vPrintEulerAngles()
+{
+	timePrev = timenow;  // the previous time is stored before the actual time read
+	timenow = u32milisecondsCounter;  // actual time read
+	elapsedTime = (timenow - timePrev) / 100; //ms
+	Serial.print(elapsedTime);
+	Serial.print("phi: ");
+	Serial.print(mpuprocessing.phi);
+	Serial.print("    theta: ");
+	Serial.print(mpuprocessing.theta);
+	Serial.print("    psi: ");
+	Serial.println(mpuprocessing.psi);
+}

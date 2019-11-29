@@ -25,6 +25,9 @@
     <Filter Include="Resource Files\Motors">
       <UniqueIdentifier>{40052153-43c0-48f6-9bc9-2de15c90761a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Timer">
+      <UniqueIdentifier>{fb60f234-2daa-48ec-a192-8f66bb2988a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h">

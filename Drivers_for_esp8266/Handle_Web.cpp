@@ -158,11 +158,9 @@ void DriversInit()
 
 	//start the Serial communication at 115200 bits/s
 	Serial.begin(115200);
-
-	vInit_Mpu(); // Init MPU sensors (accelerometer / gyroscope / magnetometer)
-
 	//wait 1 s until the Serial communication is started
 	delay(1000);
+	vInit_Mpu(); // Init MPU sensors (accelerometer / gyroscope / magnetometer)
 }
 
 
@@ -183,15 +181,15 @@ void ScheduleTime1()
 	timer0_write(ESP.getCycleCount() + 160000); //160Mhz -> 160*10^6 = 1 second (160000000)
 
 	u32milisecondsCounter++;
-
+	
 	//activate 1 second interruput
 	if ((u32milisecondsCounter % 100) == 0)
 	{
 		//vSystemDroneControl();
 		vPIDSystemControl();
-
+		vPrintEulerAngles();
 		//activate 1 second interruput
-		if ((u32milisecondsCounter % 1000) == 0)
+		if ((u32milisecondsCounter % 10000) == 0)
 		{
 			//vSystemDroneControl();
 			vDoIsr1Sec();
