@@ -7,6 +7,7 @@
 #include <Servo.h>                //including the servo library
 #include "Motors.h"
 #include "Control.h"
+
 static const uint8_t D0 = 16;
 static const uint8_t D1 = 5;
 static const uint8_t D2 = 4;
@@ -27,9 +28,6 @@ const int blue = D8;
 const int Motor4PIN = D5;
 
 //Master Functions
-extern void InitTimer1(void);
-void vDoIsr1Sec(void);
-extern void ScheduleTime1(void);
 extern void DriversInit(void);
 
 

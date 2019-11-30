@@ -4,14 +4,70 @@
 #include  "MadgwickAHRS.h"
 #include "ShareableResources.h"
 
+class MPU_PROCESSING
+{
+public:
+	boolean bMPUInitState = 0;
+	//float data for Accelerometer processing
+	float fAx = 0;
+	float fAy = 0;
+	float fAz = 0;
+
+	//float data for Gyroscope processing
+	float fGx = 0;
+	float fGy = 0;
+	float fGz = 0;
+
+	//float data for Magnetormeter processing
+	float fMx = 0;
+	float fMy = 0;
+	float fMz = 0;
+
+	//float data for Temperature processing
+	float fTemperature = 0;
+
+	double R11 = 0;
+	double R21 = 0;
+	double R31 = 0;
+	double R32 = 0;
+	double R33 = 0;
+
+	double phi = 0;
+	double theta = 0;
+	double psi = 0;
+
+private:
+
+};
 
 MPU9255 mpu;
 MPU_PROCESSING mpuprocessing;
 float rad_to_deg = 180 / M_PI;
-double offsetPHI=0.03;
-double offsetPSI = 0.03;
-double offsetTHETA = 0.03;
+double offsetPHI= 0.00;
+double offsetTHETA = 0.00;
+double offsetPSI = 0.00;
+
 float elapsedTime, timenow, timePrev;
+
+ double phiLastValue =0;
+ double thetaLastValue=0;
+ double psiLastValue=0;
+
+ double phiNewValue = 0;
+ double thetaNewValue = 0;
+ double psiNewValue = 0;
+
+
+
+int16_t gX_offset = 0;//gyroscope X axis offset
+int16_t gY_offset = 0;//gyroscope Y axis offset
+int16_t gZ_offset = 0;//gyroscope Z axis offset
+
+int16_t aX_offset = 0;//accelerometer X axis offset
+int16_t aY_offset = 0;//accelerometer Y axis offset
+int16_t aZ_offset = 0;//accelerometer Z axis offset
+
+
 
 void vInit_Mpu()//init MPU reading
 {
@@ -28,7 +84,9 @@ void vInit_Mpu()//init MPU reading
 
 	mpu.set_acc_scale(scale_2g);//set accelerometer scale
 	mpu.set_gyro_scale(scale_250dps);//set gyroscope scale
+	mpu.disable_motion_interrput();
 	vInit_MpuCalibration();
+
 }
 
 
@@ -36,14 +94,6 @@ void vInit_MpuCalibration()//init MPU calibration
 { //set bandwidths to 5Hz to reduce the noise
 	mpu.set_acc_bandwidth(acc_5Hz);
 	mpu.set_gyro_bandwidth(gyro_5Hz);
-
-	int16_t gX_offset = 0;//gyroscope X axis offset
-	int16_t gY_offset = 0;//gyroscope Y axis offset
-	int16_t gZ_offset = 0;//gyroscope Z axis offset
-
-	int16_t aX_offset = 0;//accelerometer X axis offset
-	int16_t aY_offset = 0;//accelerometer Y axis offset
-	int16_t aZ_offset = 0;//accelerometer Z axis offset
 
 	//update flags
 
@@ -66,7 +116,6 @@ void vInit_MpuCalibration()//init MPU calibration
 	{
 		mpu.read_acc();
 		mpu.read_gyro();
-
 		//-------- adjust accelerometer X axis offset ----------
 
 		if (mpu.ax > 0 && update_aX == true)//if X axis readings are greater than 0
@@ -140,37 +189,6 @@ void vInit_MpuCalibration()//init MPU calibration
 			gZ_offset++;//increment offset
 		}
 
-		//print data
-		Serial.print("AX: ");
-		Serial.print(mpu.ax);
-		Serial.print(" (Offset: ");
-		Serial.print(aX_offset);
-		Serial.print(" ) ");
-		Serial.print(" AY: ");
-		Serial.print(mpu.ay);
-		Serial.print(" (Offset: ");
-		Serial.print(aY_offset);
-		Serial.print(" ) ");
-		Serial.print(" AZ: ");
-		Serial.print(mpu.az);
-		Serial.print(" (Offset: ");
-		Serial.print(aZ_offset);
-		Serial.print(" ) ");
-		Serial.print("    GX: ");
-		Serial.print(mpu.gx);
-		Serial.print(" (Offset: ");
-		Serial.print(gX_offset);
-		Serial.print(" ) ");
-		Serial.print(" GY: ");
-		Serial.print(" (Offset: ");
-		Serial.print(gY_offset);
-		Serial.print(" ) ");
-		Serial.print(mpu.gy);
-		Serial.print(" GZ: ");
-		Serial.print(mpu.gz);
-		Serial.print(" (Offset: ");
-		Serial.print(gZ_offset);
-		Serial.println(" ) ");
 
 		//set new offset
 		if (update_gX == true)
@@ -273,14 +291,6 @@ void vprint_Mpu_data()//read and print raw data from the sensors
 	
 	//PRINT ACCELEROSCOPE MEASUREMENT
 	Serial.print("AX: ");
-	Serial.print(mpu.ax);
-	Serial.print("    AY: ");
-	Serial.print(mpu.ay);
-	Serial.print("    AZ: ");
-	Serial.println(mpu.az);
-
-	//PRINT ACCELEROSCOPE MEASUREMENT
-	Serial.print("AX: ");
 	Serial.print(mpuprocessing.fAx);
 	Serial.print("    AY: ");
 	Serial.print(mpuprocessing.fAy);
@@ -296,20 +306,21 @@ void vprint_Mpu_data()//read and print raw data from the sensors
 	Serial.println(mpuprocessing.fGz);
 
 	//PRINT MAGNETOMETER MEASUREMENT
+
 	Serial.print("MX: ");
 	Serial.print(mpuprocessing.fMx);
 	Serial.print("    MY: ");
 	Serial.print(mpuprocessing.fMy);
 	Serial.print("    MZ: ");
 	Serial.println(mpuprocessing.fMz);
+	
 
 	//PRINT TEMPERATURE MEASUREMENT
 	Serial.print("Temperature " );
 	Serial.println(mpuprocessing.fTemperature);
 
 	//
-	
-	//fWebAccz = mpuprocessing.fAz;
+
 
 
 
@@ -399,9 +410,19 @@ int16_t  s16GetMpuStrMz()
 	return  mpu.gz;
 }
 
+double dGetMpuStrPhi()
+{
+	return mpuprocessing.phi;
+}
+double dGetMpuStrTheta()
+{
+	return mpuprocessing.theta;
+}
+double  dGetMpuStrPsi()
+{
+	return  mpuprocessing.psi;
 
-
-
+}
 
 
 
@@ -415,54 +436,54 @@ void vProcess_Mpu_data()//read and process data from the sensors
 	//procces accelerometer row data into meaningful data
 	if (scale_2g)
 	{
-		mpuprocessing.fAx = (((float)mpu.ax) / 16384) * gravity;
-		mpuprocessing.fAy = (((float)mpu.ay) / 16384) * gravity;
-		mpuprocessing.fAz = (((float)mpu.az) / 16384) * gravity;
+		mpuprocessing.fAx = (((float)(mpu.ax  /* + aX_offset */)) / 16384) * gravity;
+		mpuprocessing.fAy = (((float)(mpu.ay  /* +  aY_offset*/)) / 16384) * gravity;
+		mpuprocessing.fAz = (((float)(mpu.az  /* +  aZ_offset*/)) / 16384) * gravity;
 	}
 	if (scale_4g)
 	{
-		mpuprocessing.fAx = (((float)mpu.ax) / 8192) * gravity;
-		mpuprocessing.fAy = (((float)mpu.ay) / 8192) * gravity;
-		mpuprocessing.fAz = (((float)mpu.az) / 8192) * gravity;
+		mpuprocessing.fAx = (((float)(mpu.ax  /* +  aX_offset*/)) / 8192) * gravity;
+		mpuprocessing.fAy = (((float)(mpu.ay  /* +  aY_offset*/)) / 8192) * gravity;
+		mpuprocessing.fAz = (((float)(mpu.az  /* +  aZ_offset*/)) / 8192) * gravity;
 	}
 	if (scale_8g)
 	{
-		mpuprocessing.fAx = ((float)mpu.ax / 4096) * gravity;
-		mpuprocessing.fAy = ((float)mpu.ay / 4096) * gravity;
-		mpuprocessing.fAz = ((float)mpu.az / 4096) * gravity;
+		mpuprocessing.fAx = (((float)(mpu.ax  /* +  aX_offset*/)) / 4096) * gravity;
+		mpuprocessing.fAy = (((float)(mpu.ay  /* +  aY_offset*/)) / 4096) * gravity;
+		mpuprocessing.fAz = (((float)(mpu.az  /* +  aZ_offset*/)) / 4096) * gravity;
 	}
 	if (scale_16g)
 	{
-		mpuprocessing.fAx = ((float)mpu.ax / 2048) * gravity;
-		mpuprocessing.fAy = ((float)mpu.ay / 2048) * gravity;
-		mpuprocessing.fAz = ((float)mpu.az / 2048) * gravity;
+		mpuprocessing.fAx = (((float)(mpu.ax  /* +  aX_offset*/)) / 2048) * gravity;
+		mpuprocessing.fAy = (((float)(mpu.ay  /* +  aY_offset*/)) / 2048) * gravity;
+		mpuprocessing.fAz = (((float)(mpu.az  /* +  aZ_offset*/)) / 2048) * gravity;
 	}
 
 	//procces gyroscope row data into meaningful data
 
 	if (scale_250dps)
 	{
-		mpuprocessing.fGx = ((float)mpu.gx / 131);
-		mpuprocessing.fGy = ((float)mpu.gy / 131);
-		mpuprocessing.fGz = ((float)mpu.gz / 131);
+		mpuprocessing.fGx = ((float)(mpu.gx  /* +gX_offset */  ) / 131);
+		mpuprocessing.fGy = ((float)(mpu.gy  /* +gY_offset */  ) / 131);
+		mpuprocessing.fGz = ((float)(mpu.gz  /* +gZ_offset */  ) / 131);
 	}
 	if (scale_500dps)
 	{
-		mpuprocessing.fGx = ((float)mpu.gx / 65.5);
-		mpuprocessing.fGy = ((float)mpu.gy / 65.5);
-		mpuprocessing.fGz = ((float)mpu.gz / 65.5);
+		mpuprocessing.fGx = ((float)(mpu.gx  /* +gX_offset */  ) / 65.5);
+		mpuprocessing.fGy = ((float)(mpu.gy  /* +gY_offset */  ) / 65.5);
+		mpuprocessing.fGz = ((float)(mpu.gz  /* +gZ_offset */  ) / 65.5);
 	}
 	if (scale_1000dps)
 	{
-		mpuprocessing.fGx = ((float)mpu.gx / 32.8);
-		mpuprocessing.fGy = ((float)mpu.gy / 32.8);
-		mpuprocessing.fGz = ((float)mpu.gz / 32.8);
+		mpuprocessing.fGx = ((float)(mpu.gx  /* +gX_offset */  ) / 32.8);
+		mpuprocessing.fGy = ((float)(mpu.gy  /* +gY_offset */  ) / 32.8);
+		mpuprocessing.fGz = ((float)(mpu.gz  /* +gZ_offset */  ) / 32.8);
 	}
 	if (scale_2000dps)
 	{
-		mpuprocessing.fGx = ((float)mpu.gx / 16.4);
-		mpuprocessing.fGy = ((float)mpu.gy / 16.4);
-		mpuprocessing.fGz = ((float)mpu.gz / 16.4);
+		mpuprocessing.fGx = ((float)(mpu.gx  /* +gX_offset */  ) / 16.4);
+		mpuprocessing.fGy = ((float)(mpu.gy  /* +gY_offset */  ) / 16.4);
+		mpuprocessing.fGz = ((float)(mpu.gz  /* +gZ_offset */  ) / 16.4);
 	}
 
 	//procces magnetormeter row data into meaningful data
@@ -481,7 +502,7 @@ void vProcess_Mpu_data()//read and process data from the sensors
 }
 
 
-void vPIDSystemControl()
+void vMadgwickFilterControl()
 {
 	vProcess_Mpu_data();
 
@@ -495,9 +516,10 @@ void vPIDSystemControl()
 	 mpuprocessing.R32 = 2. * (q2 * q3 - q0 * q1);
 	 mpuprocessing.R33 = 2. * q0 * q0 - 1 + 2. * q3 * q3;
 
-	 mpuprocessing.phi = ((atan2(mpuprocessing.R32, mpuprocessing.R33)) * rad_to_deg);
-	 mpuprocessing.theta = (-atan(mpuprocessing.R31 / sqrt(1 - mpuprocessing.R31 * mpuprocessing.R31)))* rad_to_deg;
-	 mpuprocessing.psi = (atan2(mpuprocessing.R21, mpuprocessing.R11))* rad_to_deg;
+	 mpuprocessing.phi = ((((atan2(mpuprocessing.R32, mpuprocessing.R33)))) * rad_to_deg) +offsetPHI;
+	 mpuprocessing.theta = ((-atan(mpuprocessing.R31 / (sqrt(1 - mpuprocessing.R31 * mpuprocessing.R31)))) * rad_to_deg) + offsetTHETA;
+	 mpuprocessing.psi = ((atan2(mpuprocessing.R21, mpuprocessing.R11)) * rad_to_deg) + offsetPSI;
+
 }
 
 void vPrintEulerAngles()
@@ -505,11 +527,34 @@ void vPrintEulerAngles()
 	timePrev = timenow;  // the previous time is stored before the actual time read
 	timenow = u32milisecondsCounter;  // actual time read
 	elapsedTime = (timenow - timePrev) / 100; //ms
-	Serial.print(elapsedTime);
-	Serial.print("phi: ");
+
+	static int calibration = 10;
+	
+	 phiNewValue = mpuprocessing.phi;
+	 thetaNewValue = mpuprocessing.theta;
+	 psiNewValue = mpuprocessing.psi;
+
+	 /*
+	Serial.print(" phi: ");
+	Serial.print(phiNewValue - phiLastValue);
+	Serial.print("    theta: ");
+	Serial.print(thetaNewValue - thetaLastValue);
+	Serial.print("    psi: ");
+	Serial.println(psiNewValue - psiLastValue);
+	*/
+
+	phiLastValue = phiNewValue;
+	thetaLastValue = thetaNewValue;
+	psiLastValue = psiNewValue;
+	//Serial.print(elapsedTime);
+	
+	
+	Serial.print(" phi: ");
 	Serial.print(mpuprocessing.phi);
 	Serial.print("    theta: ");
 	Serial.print(mpuprocessing.theta);
 	Serial.print("    psi: ");
-	Serial.println(mpuprocessing.psi);
+	Serial.println(mpuprocessing.psi); 
+	
+
 }

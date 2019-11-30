@@ -131,6 +131,7 @@
     <ClInclude Include="index.h" />
     <ClInclude Include="MpuControl.h" />
     <ClInclude Include="ShareableResources.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Main\Main.ino" />
@@ -139,6 +140,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Control.cpp" />
     <ClCompile Include="Handle_Web.cpp" />
     <ClCompile Include="MadgwickAHRS.cpp" />

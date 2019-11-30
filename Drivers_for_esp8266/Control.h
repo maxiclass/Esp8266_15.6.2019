@@ -4,7 +4,7 @@
 #include <cstdint>
 
 extern void vSystemDroneControl();
-extern void vMainPIDDroneControl();
+extern void vMainPIDDroneControl(double dSetpoint);
 class SystemControl
 {
 public:

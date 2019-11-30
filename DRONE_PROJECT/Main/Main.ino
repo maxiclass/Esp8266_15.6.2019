@@ -5,11 +5,11 @@ void setup()
 
   //call the two functions used to connect connect to wifi
   //and setup the server
+  //ESP.wdtDisable();
   DriversInit();
   connectToWiFi();
   setupServer();
   InitTimer1();
-//  analogWriteFreq(60) ; // should give 60 Hz
 }
 
 void loop()
