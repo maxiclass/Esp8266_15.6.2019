@@ -33,20 +33,6 @@ extern float fGetMpuStrMx();
 extern float fGetMpuStrMy();
 extern float fGetMpuStrMz();
 
-extern int16_t s16GetMpuStrAx();
-extern int16_t s16GetMpuStrAy();
-extern int16_t s16GetMpuStrAz();
-
-extern int16_t s16GetMpuStrGx();
-extern int16_t s16GetMpuStrGy();
-extern int16_t s16GetMpuStrGz();
-
-extern int16_t s16GetMpuStrMx();
-extern int16_t s16GetMpuStrMy();
-extern int16_t s16GetMpuStrMz();
-
-
-
 extern double dGetMpuStrPhi();
 extern double dGetMpuStrTheta();
 extern double dGetMpuStrPsi();
@@ -54,3 +40,6 @@ extern double dGetMpuStrPsi();
 
 extern void vMadgwickFilterControl();
 extern void vPrintEulerAngles();
+
+
+extern int16_t vTransformBeta();

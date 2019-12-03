@@ -3,6 +3,10 @@
 #include "Motors.h"
 #include <cstdint>
 
+
+#define MIN_THROTTLE_VAL 5
+#define MAX_THROTTLE_VAL 100
+
 extern void vSystemDroneControl();
 extern void vMainPIDDroneControl(double dSetpoint);
 class SystemControl
@@ -17,9 +21,9 @@ public:
 	uint16_t roll_pid_p = 0;
 	uint16_t pitch_pid_p = 0;
 
-	uint16_t MotorFrontLeftValue=0;
-	uint16_t MotorFrontRightValue=0;
-	uint16_t MotorBackLeftValue=0;
-	uint16_t MotorBackRightValue = 0;
+	double MotorFrontLeftValue=0;
+	double MotorFrontRightValue=0;
+	double MotorBackLeftValue=0;
+	double MotorBackRightValue = 0;
 private:
 };

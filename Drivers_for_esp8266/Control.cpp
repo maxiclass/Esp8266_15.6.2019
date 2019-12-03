@@ -28,10 +28,13 @@ double PsiActual = 0;
 double ThetaActual = 0;
 double PhiActual = 0;
 
-uint16_t MotorFrontLeftValue;
-uint16_t MotorFrontRightValue;
-uint16_t MotorBackLeftValue;
-uint16_t MotorBackRightValue;
+double MotorFrontLeftValue;
+double MotorFrontRightValue;
+double MotorBackLeftValue;
+double MotorBackRightValue;
+
+
+
 
 SystemControl SC;
 
@@ -65,7 +68,7 @@ void vMainPIDDroneControl(double dSetpoint)
 	float pitch_pid = 0;
 	float roll_pid = 0;
 	int   throttle = dSetpoint;
-
+	int   throttlePOINT = throttle/10;
 	// Initialize motor commands with throttle
 	MotorFrontLeftValue = throttle;
 	MotorFrontRightValue = throttle;
@@ -84,11 +87,37 @@ void vMainPIDDroneControl(double dSetpoint)
 
 
 		// Calculate pulse duration for each ESC
-		MotorFrontLeftValue = throttle - roll_pid - pitch_pid + yaw_pid;
-		MotorFrontRightValue = throttle + roll_pid - pitch_pid - yaw_pid;
-		MotorBackLeftValue = throttle - roll_pid + pitch_pid - yaw_pid;
-		MotorBackRightValue = throttle + roll_pid + pitch_pid + yaw_pid;
 
+
+
+
+		MotorFrontLeftValue = throttle  + (( - roll_pid - pitch_pid + yaw_pid)/180)* throttlePOINT;
+		MotorFrontRightValue = throttle +(( + roll_pid - pitch_pid - yaw_pid) / 180) * throttlePOINT;
+		MotorBackLeftValue = throttle    +(( - roll_pid + pitch_pid - yaw_pid) / 180) * throttlePOINT;
+		MotorBackRightValue = throttle  +((  + roll_pid + pitch_pid + yaw_pid ) / 180) * throttlePOINT;
+
+		if (throttle < MIN_THROTTLE_VAL)
+		{
+			throttle = MIN_THROTTLE_VAL;
+		}
+		else {}
+
+		if (throttle >= MAX_THROTTLE_VAL)
+		{
+			throttle = MAX_THROTTLE_VAL;
+		}
+		else {}
+
+
+
+		Serial.print(" FL: ");
+		Serial.print(MotorFrontLeftValue);
+		Serial.print("    FR: ");
+		Serial.print(MotorFrontRightValue);
+		Serial.print("    BL: ");
+		Serial.print(MotorBackLeftValue);
+		Serial.print("    BR: ");
+		Serial.println(MotorBackRightValue);
 
 	u32ControlMotorSpeed(MotorFrontLeftValue, MotorFrontRightValue, MotorBackLeftValue, MotorBackRightValue);
 

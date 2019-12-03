@@ -7,7 +7,7 @@
 class MPU_PROCESSING
 {
 public:
-	boolean bMPUInitState = 0;
+	boolean bMPUCalibrationDone = false;
 	//float data for Accelerometer processing
 	float fAx = 0;
 	float fAy = 0;
@@ -42,10 +42,8 @@ private:
 
 MPU9255 mpu;
 MPU_PROCESSING mpuprocessing;
-float rad_to_deg = 180 / M_PI;
-double offsetPHI= 0.00;
-double offsetTHETA = 0.00;
-double offsetPSI = 0.00;
+float rad_to_deg = (180 / M_PI);
+
 
 float elapsedTime, timenow, timePrev;
 
@@ -58,6 +56,9 @@ float elapsedTime, timenow, timePrev;
  double psiNewValue = 0;
 
 
+ const int analogPin = A0;
+
+
 
 int16_t gX_offset = 0;//gyroscope X axis offset
 int16_t gY_offset = 0;//gyroscope Y axis offset
@@ -68,11 +69,15 @@ int16_t aY_offset = 0;//accelerometer Y axis offset
 int16_t aZ_offset = 0;//accelerometer Z axis offset
 
 
+#define         RATIO_ACC       (4./32767.)
+#define         RATIO_GYRO      ((1000./32767.)*(M_PI/180.))
+//#define         RATIO_GYRO      (1000./32767.)
+#define         RATIO_MAG       (48./32767.)
 
 void vInit_Mpu()//init MPU reading
 {
 	
-	mpuprocessing.bMPUInitState = mpu.init();
+	mpu.init();
 
 	mpu.enable(Acc_X);
 	mpu.enable(Acc_Y);
@@ -85,7 +90,7 @@ void vInit_Mpu()//init MPU reading
 	mpu.set_acc_scale(scale_2g);//set accelerometer scale
 	mpu.set_gyro_scale(scale_250dps);//set gyroscope scale
 	mpu.disable_motion_interrput();
-	vInit_MpuCalibration();
+	
 
 }
 
@@ -283,6 +288,9 @@ void vInit_MpuCalibration()//init MPU calibration
 	Serial.print("  Z: ");
 	Serial.println(gZ_offset);
 	Serial.println();
+
+	mpuprocessing.bMPUCalibrationDone = true;
+
 }
 
 void vprint_Mpu_data()//read and print raw data from the sensors
@@ -365,51 +373,6 @@ float  fGetMpuStrMz()
 {
 	return  mpuprocessing.fMz;
 }
-
-
-
-
-
-
-int16_t s16GetMpuStrAx()
-{
-	return mpu.ax;
-}
-int16_t s16GetMpuStrAy()
-{
-	return mpu.ay;
-}
-int16_t  s16GetMpuStrAz()
-{
-	return  mpu.az;
-}
-
-int16_t s16GetMpuStrGx()
-{
-	return mpu.gx;
-}
-int16_t s16GetMpuStrGy()
-{
-	return mpu.gy;
-}
-int16_t  s16GetMpuStrGz()
-{
-	return  mpu.gz;
-}
-
-int16_t s16GetMpuStrMx()
-{
-	return mpu.gx;
-}
-int16_t s16GetMpuStrMy()
-{
-	return mpu.gy;
-}
-int16_t  s16GetMpuStrMz()
-{
-	return  mpu.gz;
-}
-
 double dGetMpuStrPhi()
 {
 	return mpuprocessing.phi;
@@ -504,11 +467,42 @@ void vProcess_Mpu_data()//read and process data from the sensors
 
 void vMadgwickFilterControl()
 {
-	vProcess_Mpu_data();
+   if (	mpuprocessing.bMPUCalibrationDone ==false ) 
 
-	MadgwickAHRSupdate(mpuprocessing.fGx, mpuprocessing.fGy, mpuprocessing.fGz, \
-					   mpuprocessing.fAx, mpuprocessing.fAy, mpuprocessing.fAz,\
-					   mpuprocessing.fMx, mpuprocessing.fMy, mpuprocessing.fMz);
+   { 
+	 vInit_MpuCalibration();
+	mpuprocessing.bMPUCalibrationDone = true; //delete this after wdt problem
+   }
+
+
+   else
+   {
+	    //vProcess_Mpu_data();
+	mpu.read_acc();
+	mpu.read_gyro();
+	mpu.read_mag();
+
+	// Convert into floats
+	float ax, ay, az;
+	float gx, gy, gz;
+	float mx, my, mz;
+
+	ax = mpu.ax * RATIO_ACC;
+	ay = mpu.ay * RATIO_ACC;
+	az = mpu.az * RATIO_ACC;
+
+	gx = (mpu.gx - 48.4827) * RATIO_GYRO;
+	gy = (mpu.gy + 76.3552) * RATIO_GYRO;
+	gz = (mpu.gz + 64.3234) * RATIO_GYRO;
+
+	mx = mpu.mx * RATIO_MAG;
+	my = mpu.my * RATIO_MAG;
+	mz = mpu.mz * RATIO_MAG;
+
+
+	MadgwickAHRSupdate( gx,  gy,  gz, \
+					    ax,  ay,  az,\
+					    mx,  my,  mz);
 
 	 mpuprocessing.R11 = 2. * q0 * q0 - 1 + 2. * q1 * q1;
 	 mpuprocessing.R21 = 2. * (q1 * q2 - q0 * q3);
@@ -516,9 +510,12 @@ void vMadgwickFilterControl()
 	 mpuprocessing.R32 = 2. * (q2 * q3 - q0 * q1);
 	 mpuprocessing.R33 = 2. * q0 * q0 - 1 + 2. * q3 * q3;
 
-	 mpuprocessing.phi = ((((atan2(mpuprocessing.R32, mpuprocessing.R33)))) * rad_to_deg) +offsetPHI;
-	 mpuprocessing.theta = ((-atan(mpuprocessing.R31 / (sqrt(1 - mpuprocessing.R31 * mpuprocessing.R31)))) * rad_to_deg) + offsetTHETA;
-	 mpuprocessing.psi = ((atan2(mpuprocessing.R21, mpuprocessing.R11)) * rad_to_deg) + offsetPSI;
+	 //offsetPHI = vTransformBeta();
+
+	 mpuprocessing.phi = (((atan2(mpuprocessing.R32, mpuprocessing.R33)))) * rad_to_deg ;
+	 mpuprocessing.theta = (-atan(mpuprocessing.R31 / (sqrt(1 - mpuprocessing.R31 * mpuprocessing.R31)))) * rad_to_deg ;
+	 mpuprocessing.psi = (atan2(mpuprocessing.R21, mpuprocessing.R11)) * rad_to_deg;
+   }
 
 }
 
@@ -530,9 +527,9 @@ void vPrintEulerAngles()
 
 	static int calibration = 10;
 	
-	 phiNewValue = mpuprocessing.phi;
-	 thetaNewValue = mpuprocessing.theta;
-	 psiNewValue = mpuprocessing.psi;
+	 phiNewValue = (float) mpuprocessing.phi;
+	 thetaNewValue = (float) mpuprocessing.theta;
+	 psiNewValue = (float)  mpuprocessing.psi;
 
 	 /*
 	Serial.print(" phi: ");
@@ -549,7 +546,8 @@ void vPrintEulerAngles()
 	//Serial.print(elapsedTime);
 	
 	
-	Serial.print(" phi: ");
+	
+		Serial.print(" phi: ");
 	Serial.print(mpuprocessing.phi);
 	Serial.print("    theta: ");
 	Serial.print(mpuprocessing.theta);
@@ -557,4 +555,15 @@ void vPrintEulerAngles()
 	Serial.println(mpuprocessing.psi); 
 	
 
+
+}
+
+
+int16_t vTransformBeta()
+{
+	static int16_t beta;
+int val = analogRead(analogPin);  // read the input pin
+beta = map(val, 0, 1023, 0, 100);
+Serial.println(beta);          // debug value
+return beta;
 }

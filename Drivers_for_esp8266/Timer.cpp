@@ -6,10 +6,13 @@
 #include "Motors.h"
 #include "Control.h"
 #include "MpuControl.h"
+#include "Handle_Web.h"
 
  void InitTimer1(void);
  void vDoIsr1Sec(void);
  void ScheduleTime1(void);
+
+
 // initialize timer1 
 void InitTimer1()
 {
@@ -27,16 +30,25 @@ void ScheduleTime1()
 	timer0_write(ESP.getCycleCount() + 160000); //160Mhz -> 160*10^6 = 1 second (160000000)
 
 	u32milisecondsCounter++;
+	
+
+
+
 
 	//activate 1 second interruput
-	if ((u32milisecondsCounter % 100) == 0)
+	if ((u32milisecondsCounter % 10) == 0)
 	{
+		
+
+
 		//vSystemDroneControl();
 		noInterrupts();
 
-			vMadgwickFilterControl();
-			vPrintEulerAngles();
-			vMainPIDDroneControl(10);
+		//	vMadgwickFilterControl();
+		//	vPrintEulerAngles();
+		
+			vMainPIDDroneControl(vTransformBeta());
+			//vprint_Mpu_data();
 		interrupts();
 		//activate 1 second interruput
 		if ((u32milisecondsCounter % 10000) == 0)
