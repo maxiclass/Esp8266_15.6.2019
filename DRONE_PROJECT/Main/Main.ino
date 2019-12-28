@@ -2,6 +2,7 @@
 #include "Timer.h"
 #include "Control.h"
 #include "MpuControl.h"
+#include "BMP_180.h"
 void setup() 
 {
 
@@ -20,6 +21,7 @@ void loop()
 HandleWebClient();
 delay(0);
       vMadgwickFilterControl();
-     // vPrintEulerAngles();
+delay(10);
+      vProcess_BMP180_data();
 delay(10);
 }

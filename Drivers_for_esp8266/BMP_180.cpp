@@ -127,3 +127,9 @@ void vProcess_BMP180_data()
 
 	//delay(5000);  // Pause for 5 seconds.
 }
+
+
+double dGetdBMPAltitude()
+{
+	return BMP180_data.dBMPAltitude;
+}

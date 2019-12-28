@@ -79,7 +79,6 @@ void u32ControlMotorSpeed(uint32_t MotorFrontLeftValue, uint32_t MotorFrontRight
 	ServoMotor_Front_Right.write(Motor_Front_Right.u32ServoValue);
 	ServoMotor_Back_Left.write(Motor_Back_Left.u32ServoValue);
 
-	
 	Serial.print("MFL: ");
 	Serial.print(Motor_Front_Left.u32ServoValue);
 	Serial.print("    MFR: ");

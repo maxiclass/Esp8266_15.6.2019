@@ -7,6 +7,7 @@
 #include "Control.h"
 #include "MpuControl.h"
 #include "Handle_Web.h"
+#include "BMP_180.h"
 
  void InitTimer1(void);
  void vDoIsr1Sec(void);
@@ -40,23 +41,17 @@ void ScheduleTime1()
 	{
 		
 
-
+		//vProcess_BMP180_data();
 		//vSystemDroneControl();
 		noInterrupts();
 
-		//	vMadgwickFilterControl();
-		//	vPrintEulerAngles();
-		
-			vMainPIDDroneControl(vTransformBeta());
-			//vprint_Mpu_data();
+			vMainPIDDroneControl(vTransformBeta()); // transform beta read adc value and get a setpoint
+
 		interrupts();
 		//activate 1 second interruput
 		if ((u32milisecondsCounter % 10000) == 0)
 		{
-			//vSystemDroneControl();
 			vDoIsr1Sec();
-			//vprint_Mpu_data();
-
 		}
 
 

@@ -7,3 +7,5 @@
 
 extern void vInit_BMP180(void);
 extern void vProcess_BMP180_data(void);
+
+extern double dGetdBMPAltitude(void);

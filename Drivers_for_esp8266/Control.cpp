@@ -108,18 +108,6 @@ void vMainPIDDroneControl(double dSetpoint)
 		}
 		else {}
 
-
-		/*
-		Serial.print(" FL: ");
-		Serial.print(MotorFrontLeftValue);
-		Serial.print("    FR: ");
-		Serial.print(MotorFrontRightValue);
-		Serial.print("    BL: ");
-		Serial.print(MotorBackLeftValue);
-		Serial.print("    BR: ");
-		Serial.println(MotorBackRightValue);
-		*/
-
 	u32ControlMotorSpeed(MotorFrontLeftValue, MotorFrontRightValue, MotorBackLeftValue, MotorBackRightValue);
 
 
