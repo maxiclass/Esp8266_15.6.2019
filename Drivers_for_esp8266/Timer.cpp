@@ -19,7 +19,7 @@ void InitTimer1()
 	noInterrupts();
 	timer0_isr_init();
 	timer0_attachInterrupt(ScheduleTime1);
-	timer0_write(ESP.getCycleCount() + 160000); //160Mhz -> 160*10^6 = 1 second (160000000)
+	timer0_write(ESP.getCycleCount() + 1600000); //160Mhz -> 160*10^6 = 1 second (160000000)
 	interrupts();
 
 }

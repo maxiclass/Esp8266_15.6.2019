@@ -57,6 +57,9 @@
     <ClInclude Include="Timer.h">
       <Filter>Resource Files\Timer</Filter>
     </ClInclude>
+    <ClInclude Include="BMP_180.h">
+      <Filter>Resource Files\Control</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Main\Main.ino">
@@ -87,6 +90,9 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Resource Files\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="BMP_180.cpp">
+      <Filter>Resource Files\Control</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

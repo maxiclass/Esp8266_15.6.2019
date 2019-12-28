@@ -564,6 +564,8 @@ int16_t vTransformBeta()
 	static int16_t beta;
 int val = analogRead(analogPin);  // read the input pin
 beta = map(val, 0, 1023, 0, 100);
-Serial.println(beta);          // debug value
+
+//    Serial.println(beta);          // debug value
+
 return beta;
 }

@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BMP_180.h" />
     <ClInclude Include="Control.h" />
     <ClInclude Include="Handle_Web.h" />
     <ClInclude Include="Header.h" />
@@ -140,6 +141,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BMP_180.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Control.cpp" />
     <ClCompile Include="Handle_Web.cpp" />

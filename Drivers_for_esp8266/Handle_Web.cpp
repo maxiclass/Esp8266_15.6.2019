@@ -1,10 +1,13 @@
 #include "Handle_Web.h"
 #include "Control.h"
 #include "MpuControl.h"
+#include "BMP_180.h"
+#include "Timer.h"
+
 ESP8266WebServer server(80);
 
 const char* ssid = "DIGI-JPyU";
-const char* password = "Parola12";
+const char* password = "xxxxxx";
 const int maxvalue = 254; //max value for pwm's
 Servo servo1;                        //class for servo
 
@@ -158,7 +161,12 @@ void DriversInit()
 	Serial.begin(115200);
 	//wait 1 s until the Serial communication is started
 	delay(1000);
+	
+	vInit_BMP180();
+
+	delay(1000);
 	vInit_Mpu(); // Init MPU sensors (accelerometer / gyroscope / magnetometer)
+	InitTimer1();
 }
 
 

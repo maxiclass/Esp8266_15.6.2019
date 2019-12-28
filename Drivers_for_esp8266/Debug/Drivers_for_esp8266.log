@@ -1,1 +1,16 @@
-﻿
+﻿  BMP_180.cpp
+  Timer.cpp
+C:\Program Files (x86)\Arduino\libraries\Drivers_for_esp8266\BMP_180.cpp(2,10): error C1083:  Cannot open include file: 'SFE_BMP180.h': No such file or directory
+  Control.cpp
+C:\Program Files (x86)\Arduino\libraries\Drivers_for_esp8266\Timer.cpp(1,10): error C1083:  Cannot open include file: 'ESP8266WebServer.h': No such file or directory
+  Handle_Web.cpp
+C:\Program Files (x86)\Arduino\libraries\Drivers_for_esp8266\Handle_Web.h(3,10): error C1083:  Cannot open include file: 'ESP8266WebServer.h': No such file or directory
+  MadgwickAHRS.cpp
+C:\Program Files (x86)\Arduino\libraries\Drivers_for_esp8266\Handle_Web.h(3,10): error C1083:  Cannot open include file: 'ESP8266WebServer.h': No such file or directory
+  MpuControl.cpp
+C:\Program Files (x86)\Arduino\libraries\Drivers_for_esp8266\MpuControl.h(3,10): error C1083:  Cannot open include file: 'MPU9255.h': No such file or directory
+  ShareableResources.cpp
+  Motors.cpp
+C:\Program Files (x86)\Arduino\libraries\Drivers_for_esp8266\MpuControl.h(3,10): error C1083:  Cannot open include file: 'MPU9255.h': No such file or directory
+  Generating Code...
+C:\Program Files (x86)\Arduino\libraries\Drivers_for_esp8266\Motors.h(4,10): error C1083:  Cannot open include file: 'Servo.h': No such file or directory
